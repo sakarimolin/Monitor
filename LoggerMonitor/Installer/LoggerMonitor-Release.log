@@ -1,0 +1,48 @@
+Microsoft (R) Build Engine version 14.0.25420.1
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Building the projects in this solution one at a time. To enable parallel build, please add the "/m" switch.
+Build started 5.1.2021 18.25.43.
+Project "D:\Projektit\LoggerMonitor\LoggerMonitor.sln" on node 1 (default targets).
+ValidateSolutionConfiguration:
+  Building solution configuration "Release|Any CPU".
+The target "_ConvertPdbFiles" listed in a BeforeTargets attribute at "C:\Program Files (x86)\MSBuild\14.0\Microsoft.Common.targets\ImportAfter\Xamarin.Common.targets (34,37)" does not exist in the project, and will be ignored.
+The target "_CollectPdbFiles" listed in an AfterTargets attribute at "C:\Program Files (x86)\MSBuild\14.0\Microsoft.Common.targets\ImportAfter\Xamarin.Common.targets (34,70)" does not exist in the project, and will be ignored.
+The target "_CollectMdbFiles" listed in a BeforeTargets attribute at "C:\Program Files (x86)\MSBuild\14.0\Microsoft.Common.targets\ImportAfter\Xamarin.Common.targets (41,38)" does not exist in the project, and will be ignored.
+The target "_CopyMdbFiles" listed in an AfterTargets attribute at "C:\Program Files (x86)\MSBuild\14.0\Microsoft.Common.targets\ImportAfter\Xamarin.Common.targets (41,71)" does not exist in the project, and will be ignored.
+Project "D:\Projektit\LoggerMonitor\LoggerMonitor.sln" (1) is building "D:\Projektit\LoggerMonitor\LoggerMonitor\LoggerMonitor.csproj" (2) on node 1 (default targets).
+GenerateBindingRedirects:
+  No suggested binding redirects from ResolveAssemblyReferences.
+CoreResGen:
+  No resources are out of date with respect to their source files. Skipping resource generation.
+GenerateTargetFrameworkMonikerAttribute:
+Skipping target "GenerateTargetFrameworkMonikerAttribute" because all output files are up-to-date with respect to the input files.
+CoreCompile:
+  C:\Program Files (x86)\MSBuild\14.0\bin\csc.exe /noconfig /unsafe+ /nowarn:1701,1702 /nostdlib+ /errorreport:prompt /warn:4 /highentropyva+ /reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\mscorlib.dll" /reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\System.Core.dll" /reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\System.Data.DataSetExtensions.dll" /reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\System.Data.dll" /reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\System.Deployment.dll" /reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\System.dll" /reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\System.Drawing.dll" /reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\System.Windows.Forms.dll" /reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\System.Xml.dll" /reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\System.Xml.Linq.dll" /debug:pdbonly /filealign:512 /nowin32manifest /optimize+ /out:obj\Release\LoggerMonitor.exe /ruleset:"C:\Program Files (x86)\Microsoft Visual Studio 14.0\Team Tools\Static Analysis Tools\\Rule Sets\MinimumRecommendedRules.ruleset" /subsystemversion:6.00 /resource:obj\Release\LoggerMonitor.Form1.resources /resource:obj\Release\LoggerMonitor.Form2.resources /resource:obj\Release\LoggerMonitor.Properties.Resources.resources /target:winexe /utf8output /win32icon:LoggerIcon.ico AGauge.cs AGauge.Designer.cs Form_1.cs Form_1.Designer.cs loggerData.cs Settings.cs TextFile.cs Form2.cs Form2.Designer.cs Program.cs Properties\AssemblyInfo.cs Properties\Resources.Designer.cs Properties\Settings.Designer.cs raceFileClass.cs Settings1.cs "C:\Users\sakar\AppData\Local\Temp\.NETFramework,Version=v4.7.2.AssemblyAttributes.cs"
+  Using shared compilation with compiler from directory: C:\Program Files (x86)\MSBuild\14.0\bin
+CleanPublishFolder:
+  Removing directory "bin\Release\app.publish\".
+_DeploymentGenerateTrustInfo:
+Skipping target "_DeploymentGenerateTrustInfo" because all output files are up-to-date with respect to the input files.
+_DeploymentComputeClickOnceManifestInfo:
+  Creating directory "bin\Release\app.publish".
+  Copying file from "obj\Release\LoggerMonitor.exe" to "bin\Release\app.publish\LoggerMonitor.exe".
+_CopyAppConfigFile:
+Skipping target "_CopyAppConfigFile" because all output files are up-to-date with respect to the input files.
+_CopyManifestFiles:
+  Copying file from "obj\Release\LoggerMonitor.exe.manifest" to "bin\Release\LoggerMonitor.exe.manifest".
+  LoggerMonitor -> D:\Projektit\LoggerMonitor\LoggerMonitor\bin\Release\LoggerMonitor.exe.manifest
+  Copying file from "obj\Release\LoggerMonitor.application" to "bin\Release\LoggerMonitor.application".
+  LoggerMonitor -> D:\Projektit\LoggerMonitor\LoggerMonitor\bin\Release\LoggerMonitor.application
+CopyFilesToOutputDirectory:
+  Copying file from "obj\Release\LoggerMonitor.exe" to "bin\Release\LoggerMonitor.exe".
+  LoggerMonitor -> D:\Projektit\LoggerMonitor\LoggerMonitor\bin\Release\LoggerMonitor.exe
+  Copying file from "obj\Release\LoggerMonitor.pdb" to "bin\Release\LoggerMonitor.pdb".
+Done Building Project "D:\Projektit\LoggerMonitor\LoggerMonitor\LoggerMonitor.csproj" (default targets).
+Done Building Project "D:\Projektit\LoggerMonitor\LoggerMonitor.sln" (default targets).
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:01.58

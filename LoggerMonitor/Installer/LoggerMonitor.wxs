@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="windows-1252"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+	xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+
+    <?define IconDir="$(var.LoggerMonitorProjectRootDir)" ?>
+    <?define DocsDir="$(var.LoggerMonitorProjectRootDir)\Docs" ?>
+    <?define DestDir="C:\Race\LoggerMonitor" ?>
+
+    <Product Name='Logger Monitor' Manufacturer='Molin Products'
+        Id='657EFA83-D123-43AE-BAB5-F42719B99087'
+        UpgradeCode='3E9AD4F8-671B-4ACA-A144-49E237BA35EE'
+        Language='1033' Codepage='1252' Version='3.2.0'>
+		<Package Id='*' Keywords='Installer' Description="LoggerMonitor Installer"
+			Comments='Creates installer for LoggerMonitor' Manufacturer='S.Molin'
+			InstallerVersion='100' Languages='1033' Compressed='yes' SummaryCodepage='1252' />
+			
+		<Media Id='1' Cabinet='LoggerMonitor.cab' EmbedCab='yes' DiskPrompt="Media #1" />
+		<Property Id='DiskPrompt' Value="LoggerMonitor Installation [1]" />
+
+		<!-- Condition Message="You need to be an administrator to install this product.">
+			Privileged
+		</Condition -->
+
+		<Directory Id='TARGETDIR' Name='SourceDir'> 
+		<!-- will be installed to TARGETDIR -->
+		  <Directory Id='ProgramFilesFolder' Name='PFiles'>
+			<Directory Id='MolinPFiles' Name='Molin Products'>
+
+			  <Directory Id='INSTALLDIR' Name='LoggerMonitor'>
+				<Component Id='MainExecutable' Guid='391A52B9-C0A2-4B54-872F-4263A21F1D91'>
+				  <File Id='LoggerMonitorEXE' Name='$(var.LoggerMonitorApp).exe' DiskId='1' Source='$(var.BinDir)\$(var.LoggerMonitorApp).exe' KeyPath='yes'>
+					<Shortcut Id="startmenuFoobar10" Directory="ProgramMenuDir" Name="LoggerMonitor" WorkingDirectory='INSTALLDIR' Icon="LoggerMonitorIcon.exe" IconIndex="0" Advertise="yes" />
+					<Shortcut Id="desktopFoobar10" Directory="DesktopFolder" Name="LoggerMonitor" WorkingDirectory='INSTALLDIR' Icon="LoggerMonitorIcon.exe" IconIndex="0" Advertise="yes" />
+				  </File>
+				</Component>
+
+			  </Directory>
+			</Directory>
+		  </Directory>
+
+          <Directory Id="CommonAppDataFolder">
+            <Directory Id="CommonAppDataManufacturerFolder" Name="MolinProducts">
+              <Component Id="CreateManufacturerFolder" Guid="BCFC37DB-C4B4-47F6-8D6F-BCEAD8BC2E28" KeyPath="yes" NeverOverwrite="no" Permanent="no" Location="local">
+                <CreateFolder>
+		          <util:PermissionEx CreateChild="yes" CreateFile="yes" Delete="yes" Read="yes" ReadAttributes="yes" ReadExtendedAttributes="yes" ReadPermission="yes" Traverse="yes" GenericRead="yes" GenericWrite="yes" User="Everyone" />
+				</CreateFolder>
+              </Component>
+            </Directory>
+          </Directory>
+
+		  <Directory Id="ProgramMenuFolder" Name="Programs">
+			<Directory Id="ProgramMenuDir" Name="$(var.LoggerMonitorApp)">
+			  <Component Id="ProgramMenuDir" Guid="2F0C81BE-4118-4A9C-A256-7E2AAEAC7977">
+				<RemoveFolder Id='ProgramMenuDir' On='uninstall' />
+				<RegistryValue Root='HKCU' Key='Software\MolinProducts\LoggerMonitor' Type='string' Value='' KeyPath='yes' />
+			  </Component>
+			</Directory>
+		  </Directory>
+
+		  <Directory Id="DesktopFolder" Name="Desktop" />
+		</Directory>
+
+		<Feature Id='Complete' Level='1'>
+		  <ComponentRef Id='MainExecutable' />
+		  <!-- ComponentRef Id='Manual' / -->
+          <ComponentRef Id="CreateManufacturerFolder" />
+		  <ComponentRef Id='ProgramMenuDir' />
+		</Feature>
+
+		<Icon Id="LoggerMonitorIcon.exe" SourceFile="$(var.IconDir)\LoggerIcon.ICO" />
+		
+    </Product>		
+</Wix>
