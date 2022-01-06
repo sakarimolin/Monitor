@@ -78,6 +78,7 @@ namespace LoggerMonitor
             if (!success)
                 return 0;
             int[] nums = new int[memberCount];
+            NumberFormatInfo nfi = CultureInfo.CurrentCulture.NumberFormat;
             for (int i = 0; i < memberCount; i++)
             {
                 if (i == 5)      // on off -signals
@@ -85,7 +86,13 @@ namespace LoggerMonitor
                 else if (i == 0 || (i > 5 && i < 27))
                     nums[i] = System.Convert.ToInt32(numStr[i]);
                 else if (i >= 27 && i < 31)
-                    Acceleration[i-27] = System.Convert.ToDouble(numStr[i]);
+                {
+                    if (nfi.NumberDecimalSeparator == ",")
+                    {
+                        numStr[i].Replace('.', ',');
+                    }
+                    Acceleration[i - 27] = System.Convert.ToDouble(numStr[i].Replace('.', ','));
+                }
             }
             if (memberCount > 8)
             {

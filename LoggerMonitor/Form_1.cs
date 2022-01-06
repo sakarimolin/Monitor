@@ -2,12 +2,14 @@
 using System.Linq;
 using System.Windows.Forms;
 using System.IO;
+using System.Net;
 using System.Net.Sockets;
 using System.Globalization;
 
+
 namespace LoggerMonitor
 {
-	public partial class Form1 : Form
+    public partial class Form1 : Form
     {
         public  Stream raceFileStr = null;
         raceFileClass rFile;
@@ -25,6 +27,9 @@ namespace LoggerMonitor
         private TextFile loggerNameFile;
         private const string loggerNameStr = "loggerName.set";
         private bool voltageView = false;
+
+        private const int NoDataSleepMs = 500;
+        private uint linesRead = 0;
 
         public Form1()
         {
@@ -137,39 +142,89 @@ namespace LoggerMonitor
                 // connected to the same address as specified by the server, port
                 // combination.
                 Int32 port = 22222;
-                
+
                 //client = new TcpClient(loggerName, port);
-                for (int i = 0; i < 6; i++)
+
+                var ip = Dns.GetHostAddresses(loggerName);
+                logTextBox.AppendText($"1st Found {ip.Length} IP addresses. ");
+                var addrString = ip[0].ToString();
+                var ipv4Found = false;
+                for (int i = 0; i < 2; i++) // try twice find IPv4 connection
                 {
-                    if (i % 2 == 0)
+                    for (int a = 0; a < ip.Length; a++)
                     {
-                        logTextBox.AppendText(" - Connecting with IPv4 to " + loggerName);
-                        client = new TcpClient(AddressFamily.InterNetwork);
+                        if (ip[a].AddressFamily == AddressFamily.InterNetwork) // IPv4
+                        {
+                            addrString = ip[a].ToString();
+                            logTextBox.AppendText($" - Connecting with IPv4 to {loggerName} addr: {addrString} ");
+                            client = new TcpClient(AddressFamily.InterNetwork);
+                            client.ReceiveTimeout = 1500;
+                            client.SendTimeout = 1500;
+
+                            var ipEndPoint = new IPEndPoint(ip[a], port);
+                            try
+                            {
+                                //client.Connect(loggerName, port);
+                                client.Connect(ipEndPoint);
+                                ipv4Found = true;
+                                break;
+                            }
+                            catch (Exception ex)
+                            {
+                                logTextBox.AppendText(" got exception: " + ex.Message);
+                                ipv4Found = false;
+                            }
+                        }
+                    }
+                    if (ipv4Found)
+                        break;
+
+                    System.Threading.Thread.Sleep(1000);
+                    ip = Dns.GetHostAddresses(loggerName);
+                    logTextBox.AppendText($"Found {ip.Length} IP addresses. ");
+                }
+
+                var ipv6Found = false;
+                for (int i = 0; i < ip.Length && !ipv4Found; i++)
+                {
+                    addrString = ip[i].ToString();
+                    if (ip[i].AddressFamily == AddressFamily.InterNetworkV6)
+                    {
+                        ipv6Found = true;
+                        logTextBox.AppendText($" - Connecting with IPv6 to {loggerName} addr: {addrString} ");
+                        client = new TcpClient(AddressFamily.InterNetworkV6);
+                        client.ReceiveTimeout = 1500;
+                        client.SendTimeout = 1500;
                     }
                     else
-                    {
-                        logTextBox.AppendText(" - Connecting with IPv6 to " + loggerName);
-                        client = new TcpClient(AddressFamily.InterNetworkV6);
-                    }
+                        continue;
+
+                    var ipEndPoint = new IPEndPoint(ip[i], port);
                     try
                     {
-                        client.Connect(loggerName, port);
+                        //client.Connect(loggerName, port);
+                        client.Connect(ipEndPoint);
                         break;
                     }
                     catch (Exception ex)
                     {
                         logTextBox.AppendText(" got exception: " + ex.Message);
-                        if (i == 5)
+                        if (i == ip.Length - 1)
                             throw;
                     }
+                }
+                if(!ipv4Found && !ipv6Found)
+                {
+                    MessageBox.Show("No IP-connection to Logger found");
+                    return;
                 }
                 // Translate the passed message into ASCII and store it as a Byte array.
                 Byte[] data = System.Text.Encoding.ASCII.GetBytes(message);
 
                 // Get a client stream for reading and writing.
                 nwStream = client.GetStream();
-                nwStream.ReadTimeout = 3000;
-                nwStream.WriteTimeout = 2000;
+                nwStream.ReadTimeout = 2000;
+                nwStream.WriteTimeout = 1000;
                
                 // Send the message to the connected TcpServer. 
                 nwStream.Write(data, 0, data.Length);
@@ -182,6 +237,15 @@ namespace LoggerMonitor
                 // String to store the response ASCII representation.
                 String responseData = String.Empty;
 
+                var trials = 10;
+                while (--trials > 0)
+                {
+                    if (!nwStream.DataAvailable)
+                        System.Threading.Thread.Sleep(200);
+                    else
+                        break;
+                }
+
                 // Read the first batch of the TcpServer response bytes.
                 Int32 bytes = 0;
                 try
@@ -190,11 +254,12 @@ namespace LoggerMonitor
                 }
                 catch (Exception e1)
                 {
-                    MessageBox.Show("Exception in Socket Read: " + e1.Message);
+                    logTextBox.AppendText(" Exception in Socket Read: " + e1.Message);
+                    //MessageBox.Show("Exception in Socket Read: " + e1.Message);
                 }
                 responseData = System.Text.Encoding.ASCII.GetString(data, 0, bytes);
 
-                //MessageBox.Show("Received: " + responseData);
+                logTextBox.AppendText(" Received: " + responseData);
 
                 if (bytes > 0)
                 {
@@ -209,6 +274,7 @@ namespace LoggerMonitor
                 {
                     // Close everything.
                     nwStream.Close();
+                    MessageBox.Show("Connection to Logger failed");
                     client.Close();
                 }
                 else
@@ -225,7 +291,7 @@ namespace LoggerMonitor
             }
             catch (SocketException e2)
             {
-                MessageBox.Show("SocketException: " + e2.Message);
+                logTextBox.AppendText("SocketException: " + e2.Message);
             }
         }
                
@@ -368,9 +434,11 @@ namespace LoggerMonitor
                     if ((raceFileStr = openFileDialog1.OpenFile( )) != null)
                     {
                         // Insert code to read the stream here.
+                        string fName = Convert.ToString(openFileDialog1.FileName);
                         raceFileStr.Close();
                         rFile = new raceFileClass();
-                        rFile.Open( openFileDialog1.FileName );
+                        //rFile.Open(openFileDialog1.FileName);
+                        rFile.Open(fName);
                         int count = rFile.ReadOneLine();
                         if (count > 10) 
                             count = rFile.ParseLine();
@@ -775,16 +843,18 @@ namespace LoggerMonitor
             rLine = ReadLoggerData();
             if (rLine.Contains("HeaderItems"))
             {
+                logTextBox.AppendText(" Received HeaderItems.");
                 UpdateGaugeSettings(rLine);
             }
             else if (rLine.Contains("HeaderValues"))
             {
+                logTextBox.AppendText(" Received HeaderValues.");
                 UpdateGaugeLimits(rLine);
                 initLoggerTimer.Stop();
             }
             else 
             {
-                logTextBox.AppendText("Got response:" + rLine);
+                logTextBox.AppendText($"Received response:'{rLine}'");
             }
             if(logFile != null)
             {
@@ -798,11 +868,17 @@ namespace LoggerMonitor
             string rLine;
             var voltagesRead = false;
             rLine = ReadLoggerData();
+            if (rLine.Length < 10)
+            {
+                rLine += ReadLoggerData();
+            }
+            linesRead++;
             if (rLine.Contains("DataValues"))
             {
                 readErrorCount = 0;
                 monFile.wLine = rLine;  // store to disk
-                monFile.WriteOneLine();
+                if(linesRead % 20 == 0)
+                    monFile.WriteOneLine();
 
                 monFile.line = rLine;
                 int count1 = monFile.ParseLoggerLine();
@@ -836,7 +912,9 @@ namespace LoggerMonitor
             else
             {
                 readErrorCount++;
-                logTextBox.AppendText("Got wrong response:" + rLine);
+                logTextBox.AppendText($" Got wrong response:'{rLine}'");
+                if (rLine.Length < 5)
+                    System.Threading.Thread.Sleep(NoDataSleepMs);
             }
             if(readErrorCount > 9)
             {
@@ -854,6 +932,8 @@ namespace LoggerMonitor
                 else
                     loggerMonitorStarted = SendLoggerDataRequest("DataRequest");
             }
+            if (loggerMonitorStarted & readErrorCount > 0)
+                readErrorCount--;
         }
 
         private void UpdateLoggerGauges(raceFileClass raceFile)
@@ -986,7 +1066,7 @@ namespace LoggerMonitor
                     readLoggerTimer.Stop();
                 MessageBox.Show("Reading data from Logger failed. Closing connection...");
             }
-            if (readErrorCount == 2)
+            if (readErrorCount == 5)
                 MessageBox.Show("Exception in reading data from Logger.\n Original error: " + text);
         }
 
@@ -998,24 +1078,25 @@ namespace LoggerMonitor
             // String to store the response ASCII representation.
             String responseData = String.Empty;
 
-            nwStream.ReadTimeout = 3000;
+            nwStream.ReadTimeout = 500;
 
             // Read the TcpServer response bytes.
-            if (nwStream.DataAvailable)
+            try
             {
-                try
+                bool available = nwStream.DataAvailable;
+                if (available)
                 {
                     Int32 bytes = nwStream.Read(data, 0, data.Length);
                     responseData = System.Text.Encoding.ASCII.GetString(data, 0, bytes);
                 }
-                catch(Exception exc)
+                else
                 {
-                    HandleReadError(exc.Message);
+                    HandleReadError("No data.");
                 }
             }
-            else
+            catch (Exception exc)
             {
-                HandleReadError("Cannot read network");
+                HandleReadError(exc.Message);
             }
             return responseData;
         }
@@ -1056,7 +1137,6 @@ namespace LoggerMonitor
 
             if (items[0].Contains("HeaderValues") && items.Count() >= (1 + 8 + 32))
             {
-                logTextBox.AppendText(" Header Values:" + limits);
                 var i = 0;
                 for (i = 0; i < 4; i++)
                 {

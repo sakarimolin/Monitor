@@ -26,7 +26,10 @@ namespace LoggerMonitor
             path = Path;
             try
             {
-                textReadHandle = File.OpenText(workDir + path);
+                if(Path.Contains("\\"))
+                    textReadHandle = File.OpenText(path);
+                else
+                    textReadHandle = File.OpenText(workDir + path);
             }
             catch(FileNotFoundException)
             {

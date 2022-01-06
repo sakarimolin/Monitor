@@ -18,4 +18,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
     <StartWorkingDirectory>C:\ProgramData\</StartWorkingDirectory>
   </PropertyGroup>
+  <PropertyGroup>
+    <ReferencePath>C:\ProgramData\MolinProducts\</ReferencePath>
+  </PropertyGroup>
 </Project>

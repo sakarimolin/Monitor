@@ -10,7 +10,7 @@ using System.Resources;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Molin")]
 [assembly: AssemblyProduct("LoggerMonitor")]
-[assembly: AssemblyCopyright("Copyright © S.Molin 2020")]
+[assembly: AssemblyCopyright("Copyright © S.Molin 2021")]
 [assembly: AssemblyTrademark("S.Molin")]
 [assembly: AssemblyCulture("")]
 
@@ -32,6 +32,6 @@ using System.Resources;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("3.2.0.0")]
-[assembly: AssemblyFileVersion("3.2.0.0")]
+[assembly: AssemblyVersion("3.2.1.0")]
+[assembly: AssemblyFileVersion("3.2.1.0")]
 [assembly: NeutralResourcesLanguage("en-US")]
