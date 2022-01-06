@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Resources;
+using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
@@ -10,7 +10,7 @@ using System.Resources;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Molin")]
 [assembly: AssemblyProduct("LoggerMonitor")]
-[assembly: AssemblyCopyright("Copyright © S.Molin 2021")]
+[assembly: AssemblyCopyright("Copyright © S.Molin 2022")]
 [assembly: AssemblyTrademark("S.Molin")]
 [assembly: AssemblyCulture("")]
 

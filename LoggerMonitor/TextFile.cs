@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Security.AccessControl;
 using System.Windows.Forms;
 
 
@@ -31,7 +30,7 @@ namespace LoggerMonitor
                 else
                     textReadHandle = File.OpenText(workDir + path);
             }
-            catch(FileNotFoundException)
+            catch (FileNotFoundException)
             {
                 throw;
             }
