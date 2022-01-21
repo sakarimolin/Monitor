@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -132,6 +133,72 @@ namespace LoggerMonitor
             logTextBox.AppendText("Monitor started. ");
         }
 
+        private bool IPv4ConnectToClient(List<IPAddress> ipAddr, Int32 port)
+        {
+            var ipv4Found = false;
+            for (int i = 0; i < 2; i++) // try twice find IPv4 connection
+            {
+                foreach (var ip in ipAddr)
+                {
+                    var addrString = ip.ToString();
+                    logTextBox.AppendText($" - Connect with IPv4 to {loggerName} addr: {addrString} ");
+                    client = new TcpClient(AddressFamily.InterNetwork);
+                    client.ReceiveTimeout = 1500;
+                    client.SendTimeout = 1500;
+
+                    var ipEndPoint = new IPEndPoint(ip, port);
+                    try
+                    {
+                        client.Connect(ipEndPoint);
+                        ipv4Found = true;
+                        break;
+                    }
+                    catch (Exception ex)
+                    {
+                        logTextBox.AppendText(" thrown exception: " + ex.Message);
+                        ipv4Found = false;
+                    }
+                }
+                if (ipv4Found)
+                    break;
+                System.Threading.Thread.Sleep(1000);
+            }
+            return ipv4Found;
+        }
+
+        private bool IPv6ConnectToClient(List<IPAddress> ipAddr, Int32 port)
+        {
+            var ipv6Found = false;
+            foreach (var ip in ipAddr)
+            {
+                var addrString = ip.ToString();
+                if (ip.AddressFamily == AddressFamily.InterNetworkV6)
+                {
+                    ipv6Found = true;
+                    logTextBox.AppendText($" - Connect with IPv6 to {loggerName} addr: {addrString} ");
+                    client = new TcpClient(AddressFamily.InterNetworkV6);
+                    client.ReceiveTimeout = 1500;
+                    client.SendTimeout = 1500;
+                }
+                else
+                    continue;
+
+                var ipEndPoint = new IPEndPoint(ip, port);
+                try
+                {
+                    client.Connect(ipEndPoint);
+                    break;
+                }
+                catch (Exception ex)
+                {
+                    logTextBox.AppendText(" thrown exception: " + ex.Message);
+                    if (ip == ipAddr.Last())
+                        throw;
+                }
+            }
+            return ipv6Found;
+        }
+
         private void StartLoggerButtonClick(object sender, EventArgs e)
         {
             string message = "Hello -> Logger";
@@ -139,80 +206,20 @@ namespace LoggerMonitor
             {
                 // Create a TcpClient.
                 // Note, for this client to work you need to have a TcpServer 
-                // connected to the same address as specified by the server, port
-                // combination.
+                // connected to the same address as specified by the server, port combination.
                 Int32 port = 22222;
-
-                //client = new TcpClient(loggerName, port);
 
                 var ip = Dns.GetHostAddresses(loggerName);
                 logTextBox.AppendText($"1st Found {ip.Length} IP addresses. ");
-                var addrString = ip[0].ToString();
-                var ipv4Found = false;
-                for (int i = 0; i < 2; i++) // try twice find IPv4 connection
-                {
-                    for (int a = 0; a < ip.Length; a++)
-                    {
-                        if (ip[a].AddressFamily == AddressFamily.InterNetwork) // IPv4
-                        {
-                            addrString = ip[a].ToString();
-                            logTextBox.AppendText($" - Connecting with IPv4 to {loggerName} addr: {addrString} ");
-                            client = new TcpClient(AddressFamily.InterNetwork);
-                            client.ReceiveTimeout = 1500;
-                            client.SendTimeout = 1500;
+                
+                var ipv4Addresses = ip.Where(i => i.AddressFamily == AddressFamily.InterNetwork).Select(i => i).ToList();
+                var ipv4Found = IPv4ConnectToClient(ipv4Addresses, port);
 
-                            var ipEndPoint = new IPEndPoint(ip[a], port);
-                            try
-                            {
-                                //client.Connect(loggerName, port);
-                                client.Connect(ipEndPoint);
-                                ipv4Found = true;
-                                break;
-                            }
-                            catch (Exception ex)
-                            {
-                                logTextBox.AppendText(" got exception: " + ex.Message);
-                                ipv4Found = false;
-                            }
-                        }
-                    }
-                    if (ipv4Found)
-                        break;
-
-                    System.Threading.Thread.Sleep(1000);
-                    ip = Dns.GetHostAddresses(loggerName);
-                    logTextBox.AppendText($"Found {ip.Length} IP addresses. ");
-                }
-
+                var ipv6Addresses = ip.Where(i => i.AddressFamily == AddressFamily.InterNetworkV6).Select(i => i).ToList();
                 var ipv6Found = false;
-                for (int i = 0; i < ip.Length && !ipv4Found; i++)
-                {
-                    addrString = ip[i].ToString();
-                    if (ip[i].AddressFamily == AddressFamily.InterNetworkV6)
-                    {
-                        ipv6Found = true;
-                        logTextBox.AppendText($" - Connecting with IPv6 to {loggerName} addr: {addrString} ");
-                        client = new TcpClient(AddressFamily.InterNetworkV6);
-                        client.ReceiveTimeout = 1500;
-                        client.SendTimeout = 1500;
-                    }
-                    else
-                        continue;
+                if (!ipv4Found)
+                    ipv6Found = IPv6ConnectToClient(ipv6Addresses, port);
 
-                    var ipEndPoint = new IPEndPoint(ip[i], port);
-                    try
-                    {
-                        //client.Connect(loggerName, port);
-                        client.Connect(ipEndPoint);
-                        break;
-                    }
-                    catch (Exception ex)
-                    {
-                        logTextBox.AppendText(" got exception: " + ex.Message);
-                        if (i == ip.Length - 1)
-                            throw;
-                    }
-                }
                 if(!ipv4Found && !ipv6Found)
                 {
                     MessageBox.Show("No IP-connection to Logger found");

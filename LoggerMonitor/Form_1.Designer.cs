@@ -203,7 +203,9 @@ namespace LoggerMonitor
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(279, 13);
             this.label1.TabIndex = 33;
-            this.label1.Text = "Logger Monitor, Version 3.2.1 Copyright  © S.Molin, 2021.";
+            var assem = Assembly.GetExecutingAssembly();
+            var name = assem.GetName();
+            this.label1.Text = $"{name.Name}, Version {name.Version} Copyright  © S.Molin, 2022.";
             // 
             // secsLabel
             // 
@@ -2566,7 +2568,7 @@ namespace LoggerMonitor
             this.MinimumSize = new System.Drawing.Size(79, 89);
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Logger Monitor v3.2.1.0";
+            this.Text = $"{name.Name}, Version {name.Version}";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
