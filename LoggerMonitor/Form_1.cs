@@ -213,14 +213,14 @@ namespace LoggerMonitor
                 logTextBox.AppendText($"1st Found {ip.Length} IP addresses. ");
                 
                 var ipv4Addresses = ip.Where(i => i.AddressFamily == AddressFamily.InterNetwork).Select(i => i).ToList();
-                var ipv4Found = IPv4ConnectToClient(ipv4Addresses, port);
-
                 var ipv6Addresses = ip.Where(i => i.AddressFamily == AddressFamily.InterNetworkV6).Select(i => i).ToList();
-                var ipv6Found = false;
-                if (!ipv4Found)
-                    ipv6Found = IPv6ConnectToClient(ipv6Addresses, port);
 
-                if(!ipv4Found && !ipv6Found)
+                var ipv4Found = false;
+                var ipv6Found = IPv6ConnectToClient(ipv6Addresses, port);
+                if (!ipv6Found)
+                    ipv4Found = IPv4ConnectToClient(ipv4Addresses, port);
+
+                if (!ipv4Found && !ipv6Found)
                 {
                     MessageBox.Show("No IP-connection to Logger found");
                     return;
@@ -230,11 +230,18 @@ namespace LoggerMonitor
 
                 // Get a client stream for reading and writing.
                 nwStream = client.GetStream();
-                nwStream.ReadTimeout = 2000;
-                nwStream.WriteTimeout = 1000;
-               
+                nwStream.ReadTimeout = 3000;
+                nwStream.WriteTimeout = 2000;
+
                 // Send the message to the connected TcpServer. 
-                nwStream.Write(data, 0, data.Length);
+                try
+                {
+                    nwStream.Write(data, 0, data.Length);
+                }
+                catch (Exception e2)
+                {
+                    logTextBox.AppendText(" Exception in 1st Socket Write: " + e2.Message);
+                }
 
                 // Receive the TcpServer.response.
 
@@ -262,7 +269,6 @@ namespace LoggerMonitor
                 catch (Exception e1)
                 {
                     logTextBox.AppendText(" Exception in Socket Read: " + e1.Message);
-                    //MessageBox.Show("Exception in Socket Read: " + e1.Message);
                 }
                 responseData = System.Text.Encoding.ASCII.GetString(data, 0, bytes);
 
@@ -425,7 +431,14 @@ namespace LoggerMonitor
 
         private void Sensor_button_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Not implemented yet.");
+            AnalogSettingsForm aSets = new AnalogSettingsForm();
+            DialogResult result;
+
+
+            result = aSets.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+            }
         }
 
         private void Simulate_button_Click(object sender, EventArgs e)

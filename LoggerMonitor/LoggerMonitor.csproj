@@ -501,6 +501,12 @@
     <Compile Include="AGauge.Designer.cs">
       <DependentUpon>AGauge.cs</DependentUpon>
     </Compile>
+    <Compile Include="AnalogSettingsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AnalogSettingsForm.Designer.cs">
+      <DependentUpon>AnalogSettingsForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Form_1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -518,6 +524,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="AnalogSettingsForm.resx">
+      <DependentUpon>AnalogSettingsForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form_1.resx">
       <DependentUpon>Form_1.cs</DependentUpon>
       <SubType>Designer</SubType>
