@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NuGet;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -25,7 +26,7 @@ namespace LoggerMonitor
         private int readErrorCount = 0;
         private bool logging = false;
         private StreamWriter logFile;
-        private TextFile loggerNameFile;
+        //private TextFile loggerNameFile;
         private const string loggerNameStr = "loggerName.set";
         private bool voltageView = false;
 
@@ -38,17 +39,12 @@ namespace LoggerMonitor
             sets.Init();
             int port = sets.port;
 
-            /*OnOff1_label.Text = sets.OnOffs.getName(0);
-            OnOff2_label.Text = sets.OnOffs.getName(1);
-            OnOff3_label.Text = sets.OnOffs.getName(2);
-            OnOff4_label.Text = sets.OnOffs.getName(3);*/
-
-            loggerNameFile = new TextFile();
+            var loggerNameFile = new TextFile();
             try
             {
                 loggerNameFile.Open(loggerNameStr);
                 var len = loggerNameFile.ReadOneLine();
-                if (len > 5)
+                if (len > 1)
                 {
                     var name = loggerNameFile.line;
                     loggerNameTextBox.Text = name;
@@ -61,6 +57,7 @@ namespace LoggerMonitor
             finally
             {
                 loggerNameFile.Close();
+                loggerNameFile.Dispose();
             }
 
             int tIndex = sets.first_temp_sensor_index;
@@ -201,6 +198,7 @@ namespace LoggerMonitor
 
         private void StartLoggerButtonClick(object sender, EventArgs e)
         {
+            StartLoggerButton.Enabled = false;
             string message = "Hello -> Logger";
             try
             {
@@ -225,6 +223,10 @@ namespace LoggerMonitor
                     MessageBox.Show("No IP-connection to Logger found");
                     return;
                 }
+
+                LingerOption lingerOption = new LingerOption(false, 0);
+                client.LingerState = lingerOption;
+
                 // Translate the passed message into ASCII and store it as a Byte array.
                 Byte[] data = System.Text.Encoding.ASCII.GetBytes(message);
 
@@ -310,7 +312,7 @@ namespace LoggerMonitor
                
         private void StartMonitor_button_Click(object sender, EventArgs e)
         {
-			bool status = true;
+            bool status = true;
             initComPort();
             try
             {
@@ -352,6 +354,7 @@ namespace LoggerMonitor
 
         private void StopMonitor_button_Click(object sender, EventArgs e)
         {
+            StartLoggerButton.Enabled = true;
             if (monFile != null)
             {
                 monFile.CloseW();
@@ -371,16 +374,18 @@ namespace LoggerMonitor
             if (loggerMonitorStarted == true)
             {
                 SendLoggerDataRequest("Stop -> Logger");
+                logTextBox.AppendText("Stop -> Logger sent. ");
                 for (int i = 0; i < 3; i++)
                 {
                     if (nwStream.CanRead)
                     {
-                        /*byte[] data = new byte[56];
-                        Int32 bytes = nwStream.Read(data, 0, data.Length);
-                        string responseData = System.Text.Encoding.ASCII.GetString(data, 0, bytes);*/
                         string responseData = ReadLoggerData();
                         if (responseData.Contains("Stopping <- Master"))
+                        {
+                            logTextBox.AppendText("Stopping <- Master received. ");
                             break;
+                        }
+                        System.Threading.Thread.Sleep(NoDataSleepMs);
                     }
                 }
                 // Close everything.
@@ -798,8 +803,6 @@ namespace LoggerMonitor
                 else
                     OnOffButton4.BackColor = System.Drawing.Color.LightGreen;
             }
-
-
         }
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
@@ -817,7 +820,7 @@ namespace LoggerMonitor
                 logFile.Dispose();
                 logFile = null;
             }
-            loggerNameFile.Dispose();
+            //loggerNameFile.Dispose();
             //readComTimer.Stop();
             //serialPort1.Close();
         }
@@ -850,10 +853,13 @@ namespace LoggerMonitor
 
         private void loggerNameTextBox_Leave(object sender, EventArgs e)
         {
+            var loggerNameFile = new TextFile();
             loggerName = loggerNameTextBox.Text;
             loggerNameFile.OpenW(loggerNameStr);
             loggerNameFile.wLine = loggerName;
             loggerNameFile.WriteOneLine();
+            loggerNameFile.Close();
+            loggerNameFile.Dispose();
         }
 
         private void initLoggerTimer_Tick(object sender, EventArgs e)
