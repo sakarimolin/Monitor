@@ -6,6 +6,9 @@
 *.o
 *.obj
 
+*.suo
+*.log
+
 # Precompiled Headers
 *.gch
 *.pch
@@ -25,3 +28,6 @@
 bin/
 obj/
 packages/
+
+*.wixobj
+*.wixpdb

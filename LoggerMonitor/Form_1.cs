@@ -26,7 +26,6 @@ namespace LoggerMonitor
         private int readErrorCount = 0;
         private bool logging = false;
         private StreamWriter logFile;
-        //private TextFile loggerNameFile;
         private const string loggerNameStr = "loggerName.set";
         private bool voltageView = false;
 
@@ -820,9 +819,6 @@ namespace LoggerMonitor
                 logFile.Dispose();
                 logFile = null;
             }
-            //loggerNameFile.Dispose();
-            //readComTimer.Stop();
-            //serialPort1.Close();
         }
 
         private void numericUpDown1_ValueChanged(object sender, EventArgs e)
