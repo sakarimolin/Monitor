@@ -29,5 +29,6 @@ bin/
 obj/
 packages/
 
+*.msi
 *.wixobj
 *.wixpdb

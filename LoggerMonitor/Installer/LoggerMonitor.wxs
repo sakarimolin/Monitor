@@ -9,7 +9,7 @@
     <Product Name='Logger Monitor' Manufacturer='Molin Products'
         Id='657EFA83-D123-43AE-BAB5-F42719B99087'
         UpgradeCode='3E9AD4F8-671B-4ACA-A144-49E237BA35EE'
-        Language='1033' Codepage='1252' Version='3.2.0'>
+        Language='1033' Codepage='1252' Version='3.2.1'>
 		<Package Id='*' Keywords='Installer' Description="LoggerMonitor Installer"
 			Comments='Creates installer for LoggerMonitor' Manufacturer='S.Molin'
 			InstallerVersion='100' Languages='1033' Compressed='yes' SummaryCodepage='1252' />
@@ -67,7 +67,7 @@
 		  <ComponentRef Id='ProgramMenuDir' />
 		</Feature>
 
-		<Icon Id="LoggerMonitorIcon.exe" SourceFile="$(var.IconDir)\LoggerIcon.ICO" />
+		<Icon Id="LoggerMonitorIcon.exe" SourceFile="$(var.IconDir)\LoggerIcon.ico" />
 		
     </Product>		
 </Wix>
