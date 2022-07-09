@@ -1,4 +1,5 @@
-﻿using NuGet;
+﻿using JetBrains.ReSharper.TestRunner.Abstractions.Extensions;
+using NuGet;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -1162,8 +1163,8 @@ namespace LoggerMonitor
                 var i = 0;
                 for (i = 0; i < 4; i++)
                 {
-                    var min = Convert.ToDouble(items[2 * i + 1], CultureInfo.InvariantCulture);
-                    var max = Convert.ToDouble(items[2 * i + 2], CultureInfo.InvariantCulture);
+                    var min = (float)Convert.ToDouble(items[2 * i + 1], CultureInfo.InvariantCulture);
+                    var max = (float)Convert.ToDouble(items[2 * i + 2], CultureInfo.InvariantCulture);
                     if(min < 10000)
                         min = 0;
                     if(max > 20000)
@@ -1178,16 +1179,26 @@ namespace LoggerMonitor
                     var min = Convert.ToDouble(items[2 * i + 9], CultureInfo.InvariantCulture);
                     var max = Convert.ToDouble(items[2 * i + 10], CultureInfo.InvariantCulture);
                     if(min < -1000)
-                        min = 0;
+                        min = 0.0;
                     if(max > 1000)
-                        max = 1000;
+                        max = 1000.0;
                     if (min == max)
-                        max = min + 100;
+                        max = min + 100.0;
+                    if (max == 1)
+                        max = 2.0;
+                    if(max < min)
+                    {
+                        var m = max;
+                        max = min;
+                        min = m;
+                    }
+                        
                     monFile.AnalogLimit[i].min = min;
                     monFile.AnalogLimit[i].max = max;
 
                     var majorStep = (max - min) / 5;
                     majorStep = Math.Round(majorStep, 2);
+                    majorStep = Math.Abs(majorStep);
                     switch (i)
                     {
                         case 0:
@@ -1236,8 +1247,9 @@ namespace LoggerMonitor
                             addGauge1.ScaleLinesMajorStepValue = (float)majorStep;
                             break;
                         case 09:
-                            addGauge2.MaxValue = (float)max;
-                            addGauge2.MinValue = (float)min;
+                            max = Math.Round(max, 2);
+                            addGauge2.MaxValue = ((float)max);
+                            addGauge2.MinValue = ((float)min);
                             addGauge2.ScaleLinesMajorStepValue = (float)majorStep;
                             break;
                         case 10:
