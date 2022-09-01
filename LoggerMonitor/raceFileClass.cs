@@ -56,6 +56,7 @@ namespace LoggerMonitor
             AnalogLimit = new limits[16];
             for (int i = 0; i < 16; i++)
                 AnalogLimit[i] = new limits();
+
             foreach (var al in AnalogLimit)
             {
                 al.name = "Analog x";

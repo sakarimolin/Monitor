@@ -25,7 +25,7 @@ using System.Windows.Forms;
 
 namespace LoggerMonitor
 {
-    [ToolboxBitmapAttribute(typeof(AGauge), "AGauge.bmp"), 
+    [ToolboxBitmap(typeof(AGauge), "AGauge.bmp"), 
     DefaultEvent("ValueInRangeChanged"), 
     Description("Displays a value on an analog gauge. Raises an event if the value enters one of the definable ranges.")]
     public partial class AGauge : Control
