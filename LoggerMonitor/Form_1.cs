@@ -1,5 +1,5 @@
-﻿using JetBrains.ReSharper.TestRunner.Abstractions.Extensions;
-using NuGet;
+﻿//using JetBrains.ReSharper.TestRunner.Abstractions.Extensions;
+//using NuGet;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
