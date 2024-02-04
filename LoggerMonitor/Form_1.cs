@@ -8,6 +8,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Reflection;
+using System.Threading;
 using System.Windows.Forms;
 
 
@@ -1110,8 +1111,16 @@ namespace LoggerMonitor
             // Read the TcpServer response bytes.
             try
             {
-                bool available = nwStream.DataAvailable;
-                if (available)
+                var dataAvailable = false;
+                for (int trials = 0; trials < 10; trials++)
+                {
+                    dataAvailable = nwStream.DataAvailable;
+                    if (dataAvailable)
+                        break;
+                    else
+                        Thread.Sleep(100);
+                };
+                if (dataAvailable)
                 {
                     Int32 bytes = nwStream.Read(data, 0, data.Length);
                     responseData = System.Text.Encoding.ASCII.GetString(data, 0, bytes);
