@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using System.Text.RegularExpressions;
+using System.Xml.Linq;
 
 namespace LoggerMonitor
 {
@@ -46,7 +47,6 @@ namespace LoggerMonitor
             this.logDataButton = new System.Windows.Forms.Button();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.readComTimer = new System.Windows.Forms.Timer(this.components);
-            this.label1 = new System.Windows.Forms.Label();
             this.secsLabel = new System.Windows.Forms.Label();
             this.secs_heading_label = new System.Windows.Forms.Label();
             this.gauge1_label = new System.Windows.Forms.Label();
@@ -103,7 +103,7 @@ namespace LoggerMonitor
             this.StartMonitor_button.Location = new System.Drawing.Point(986, 580);
             this.StartMonitor_button.Name = "StartMonitor_button";
             this.StartMonitor_button.Size = new System.Drawing.Size(80, 41);
-            this.StartMonitor_button.TabIndex = 2;
+            this.StartMonitor_button.TabIndex = 9;
             this.StartMonitor_button.Text = "Start COM Monitor";
             this.StartMonitor_button.UseVisualStyleBackColor = true;
             this.StartMonitor_button.Click += new System.EventHandler(this.StartMonitor_button_Click);
@@ -113,7 +113,7 @@ namespace LoggerMonitor
             this.StopMonitor_button.Location = new System.Drawing.Point(986, 113);
             this.StopMonitor_button.Name = "StopMonitor_button";
             this.StopMonitor_button.Size = new System.Drawing.Size(80, 41);
-            this.StopMonitor_button.TabIndex = 3;
+            this.StopMonitor_button.TabIndex = 2;
             this.StopMonitor_button.Text = "Stop Monitor";
             this.StopMonitor_button.UseVisualStyleBackColor = true;
             this.StopMonitor_button.Click += new System.EventHandler(this.StopMonitor_button_Click);
@@ -123,7 +123,7 @@ namespace LoggerMonitor
             this.Exit_button.Location = new System.Drawing.Point(986, 639);
             this.Exit_button.Name = "Exit_button";
             this.Exit_button.Size = new System.Drawing.Size(80, 41);
-            this.Exit_button.TabIndex = 9;
+            this.Exit_button.TabIndex = 4;
             this.Exit_button.Text = "Exit";
             this.Exit_button.UseVisualStyleBackColor = true;
             this.Exit_button.Click += new System.EventHandler(this.Exit_button_Click);
@@ -143,7 +143,7 @@ namespace LoggerMonitor
             this.LogComp_button.Location = new System.Drawing.Point(986, 323);
             this.LogComp_button.Name = "LogComp_button";
             this.LogComp_button.Size = new System.Drawing.Size(80, 41);
-            this.LogComp_button.TabIndex = 6;
+            this.LogComp_button.TabIndex = 10;
             this.LogComp_button.Text = "Race Logger Settings...";
             this.LogComp_button.UseVisualStyleBackColor = true;
             this.LogComp_button.Click += new System.EventHandler(this.LogComp_button_Click);
@@ -163,7 +163,7 @@ namespace LoggerMonitor
             this.Simulate_button.Location = new System.Drawing.Point(986, 217);
             this.Simulate_button.Name = "Simulate_button";
             this.Simulate_button.Size = new System.Drawing.Size(80, 41);
-            this.Simulate_button.TabIndex = 4;
+            this.Simulate_button.TabIndex = 6;
             this.Simulate_button.Text = "Simulate from File...";
             this.Simulate_button.UseVisualStyleBackColor = true;
             this.Simulate_button.Click += new System.EventHandler(this.Simulate_button_Click);
@@ -196,17 +196,6 @@ namespace LoggerMonitor
             // 
             this.readComTimer.Tick += new System.EventHandler(this.readComTimer_Tick);
             // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(550, 800);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(279, 13);
-            this.label1.TabIndex = 33;
-            var assem = Assembly.GetExecutingAssembly();
-            var name = assem.GetName();
-            this.label1.Text = $"{name.Name}, Version {name.Version} Copyright  © S.Molin, 2022.";
-            // 
             // secsLabel
             // 
             this.secsLabel.AutoSize = true;
@@ -214,7 +203,7 @@ namespace LoggerMonitor
             this.secsLabel.Location = new System.Drawing.Point(922, 219);
             this.secsLabel.Name = "secsLabel";
             this.secsLabel.Size = new System.Drawing.Size(45, 24);
-            this.secsLabel.TabIndex = 34;
+            this.secsLabel.TabIndex = 54;
             this.secsLabel.Text = "0.00";
             // 
             // secs_heading_label
@@ -224,7 +213,7 @@ namespace LoggerMonitor
             this.secs_heading_label.Location = new System.Drawing.Point(832, 219);
             this.secs_heading_label.Name = "secs_heading_label";
             this.secs_heading_label.Size = new System.Drawing.Size(90, 24);
-            this.secs_heading_label.TabIndex = 35;
+            this.secs_heading_label.TabIndex = 55;
             this.secs_heading_label.Text = "Seconds:";
             // 
             // gauge1_label
@@ -234,7 +223,7 @@ namespace LoggerMonitor
             this.gauge1_label.Location = new System.Drawing.Point(100, 178);
             this.gauge1_label.Name = "gauge1_label";
             this.gauge1_label.Size = new System.Drawing.Size(44, 17);
-            this.gauge1_label.TabIndex = 36;
+            this.gauge1_label.TabIndex = 56;
             this.gauge1_label.Text = "0000";
             // 
             // gauge2_label
@@ -244,7 +233,7 @@ namespace LoggerMonitor
             this.gauge2_label.Location = new System.Drawing.Point(355, 178);
             this.gauge2_label.Name = "gauge2_label";
             this.gauge2_label.Size = new System.Drawing.Size(35, 17);
-            this.gauge2_label.TabIndex = 37;
+            this.gauge2_label.TabIndex = 57;
             this.gauge2_label.Text = "000";
             // 
             // numericUpDown1
@@ -283,7 +272,7 @@ namespace LoggerMonitor
             this.speed_label.Location = new System.Drawing.Point(970, 271);
             this.speed_label.Name = "speed_label";
             this.speed_label.Size = new System.Drawing.Size(92, 13);
-            this.speed_label.TabIndex = 39;
+            this.speed_label.TabIndex = 50;
             this.speed_label.Text = "Simulation Speed:";
             // 
             // loggerNameLabel
@@ -298,6 +287,7 @@ namespace LoggerMonitor
             // loggerNameTextBox
             // 
             this.loggerNameTextBox.Location = new System.Drawing.Point(986, 24);
+            this.loggerNameTextBox.MaxLength = 50;
             this.loggerNameTextBox.Name = "loggerNameTextBox";
             this.loggerNameTextBox.Size = new System.Drawing.Size(80, 20);
             this.loggerNameTextBox.TabIndex = 0;
@@ -328,7 +318,7 @@ namespace LoggerMonitor
             this.toggleValueButton.Location = new System.Drawing.Point(986, 426);
             this.toggleValueButton.Name = "toggleValueButton";
             this.toggleValueButton.Size = new System.Drawing.Size(80, 41);
-            this.toggleValueButton.TabIndex = 46;
+            this.toggleValueButton.TabIndex = 3;
             this.toggleValueButton.Text = "Toggle Value vs. Voltage";
             this.toggleValueButton.UseVisualStyleBackColor = true;
             this.toggleValueButton.Click += new System.EventHandler(this.toggleVoltageButton_Click);
@@ -340,6 +330,7 @@ namespace LoggerMonitor
             this.OnOffButton1.Name = "OnOffButton1";
             this.OnOffButton1.Size = new System.Drawing.Size(112, 41);
             this.OnOffButton1.TabIndex = 47;
+            this.OnOffButton1.TabStop = false;
             this.OnOffButton1.Text = "On/Off 1";
             this.OnOffButton1.UseVisualStyleBackColor = true;
             // 
@@ -350,6 +341,7 @@ namespace LoggerMonitor
             this.OnOffButton2.Name = "OnOffButton2";
             this.OnOffButton2.Size = new System.Drawing.Size(112, 41);
             this.OnOffButton2.TabIndex = 48;
+            this.OnOffButton2.TabStop = false;
             this.OnOffButton2.Text = "On/Off 2";
             this.OnOffButton2.UseVisualStyleBackColor = true;
             // 
@@ -360,6 +352,7 @@ namespace LoggerMonitor
             this.OnOffButton3.Name = "OnOffButton3";
             this.OnOffButton3.Size = new System.Drawing.Size(112, 41);
             this.OnOffButton3.TabIndex = 49;
+            this.OnOffButton3.TabStop = false;
             this.OnOffButton3.Text = "On/Off 3";
             this.OnOffButton3.UseVisualStyleBackColor = true;
             // 
@@ -370,6 +363,7 @@ namespace LoggerMonitor
             this.OnOffButton4.Name = "OnOffButton4";
             this.OnOffButton4.Size = new System.Drawing.Size(112, 41);
             this.OnOffButton4.TabIndex = 50;
+            this.OnOffButton4.TabStop = false;
             this.OnOffButton4.Text = "On/Off 4";
             this.OnOffButton4.UseVisualStyleBackColor = true;
             // 
@@ -476,7 +470,8 @@ namespace LoggerMonitor
             this.addGauge8.ScaleNumbersStartScaleLine = 0;
             this.addGauge8.ScaleNumbersStepScaleLines = 1;
             this.addGauge8.Size = new System.Drawing.Size(94, 140);
-            this.addGauge8.TabIndex = 32;
+            this.addGauge8.TabIndex = 34;
+            this.addGauge8.TabStop = false;
             this.addGauge8.Text = "addGauge8";
             this.addGauge8.Value = 0F;
             // 
@@ -583,7 +578,8 @@ namespace LoggerMonitor
             this.addGauge7.ScaleNumbersStartScaleLine = 0;
             this.addGauge7.ScaleNumbersStepScaleLines = 1;
             this.addGauge7.Size = new System.Drawing.Size(94, 140);
-            this.addGauge7.TabIndex = 31;
+            this.addGauge7.TabIndex = 33;
+            this.addGauge7.TabStop = false;
             this.addGauge7.Text = "addGauge7";
             this.addGauge7.Value = 0F;
             // 
@@ -690,7 +686,8 @@ namespace LoggerMonitor
             this.addGauge6.ScaleNumbersStartScaleLine = 0;
             this.addGauge6.ScaleNumbersStepScaleLines = 1;
             this.addGauge6.Size = new System.Drawing.Size(94, 140);
-            this.addGauge6.TabIndex = 30;
+            this.addGauge6.TabIndex = 32;
+            this.addGauge6.TabStop = false;
             this.addGauge6.Text = "addGauge6";
             this.addGauge6.Value = 0F;
             // 
@@ -797,7 +794,8 @@ namespace LoggerMonitor
             this.addGauge5.ScaleNumbersStartScaleLine = 0;
             this.addGauge5.ScaleNumbersStepScaleLines = 1;
             this.addGauge5.Size = new System.Drawing.Size(94, 140);
-            this.addGauge5.TabIndex = 29;
+            this.addGauge5.TabIndex = 31;
+            this.addGauge5.TabStop = false;
             this.addGauge5.Text = "addGauge5";
             this.addGauge5.Value = 0F;
             // 
@@ -904,7 +902,8 @@ namespace LoggerMonitor
             this.addGauge4.ScaleNumbersStartScaleLine = 0;
             this.addGauge4.ScaleNumbersStepScaleLines = 1;
             this.addGauge4.Size = new System.Drawing.Size(100, 140);
-            this.addGauge4.TabIndex = 28;
+            this.addGauge4.TabIndex = 30;
+            this.addGauge4.TabStop = false;
             this.addGauge4.Text = "addGauge4";
             this.addGauge4.Value = 0F;
             // 
@@ -1011,7 +1010,8 @@ namespace LoggerMonitor
             this.addGauge3.ScaleNumbersStartScaleLine = 0;
             this.addGauge3.ScaleNumbersStepScaleLines = 1;
             this.addGauge3.Size = new System.Drawing.Size(100, 140);
-            this.addGauge3.TabIndex = 27;
+            this.addGauge3.TabIndex = 29;
+            this.addGauge3.TabStop = false;
             this.addGauge3.Text = "addGauge3";
             this.addGauge3.Value = 0F;
             // 
@@ -1118,7 +1118,8 @@ namespace LoggerMonitor
             this.addGauge2.ScaleNumbersStartScaleLine = 0;
             this.addGauge2.ScaleNumbersStepScaleLines = 1;
             this.addGauge2.Size = new System.Drawing.Size(94, 140);
-            this.addGauge2.TabIndex = 26;
+            this.addGauge2.TabIndex = 28;
+            this.addGauge2.TabStop = false;
             this.addGauge2.Text = "addGauge2";
             this.addGauge2.Value = 0F;
             // 
@@ -1225,7 +1226,8 @@ namespace LoggerMonitor
             this.addGauge1.ScaleNumbersStartScaleLine = 0;
             this.addGauge1.ScaleNumbersStepScaleLines = 1;
             this.addGauge1.Size = new System.Drawing.Size(94, 140);
-            this.addGauge1.TabIndex = 25;
+            this.addGauge1.TabIndex = 27;
+            this.addGauge1.TabStop = false;
             this.addGauge1.Text = "aGauge13";
             this.addGauge1.Value = 0F;
             // 
@@ -1332,7 +1334,8 @@ namespace LoggerMonitor
             this.analogGauge8.ScaleNumbersStartScaleLine = 0;
             this.analogGauge8.ScaleNumbersStepScaleLines = 1;
             this.analogGauge8.Size = new System.Drawing.Size(175, 124);
-            this.analogGauge8.TabIndex = 20;
+            this.analogGauge8.TabIndex = 26;
+            this.analogGauge8.TabStop = false;
             this.analogGauge8.Text = "aGauge12";
             this.analogGauge8.Value = 0F;
             // 
@@ -1439,7 +1442,8 @@ namespace LoggerMonitor
             this.analogGauge7.ScaleNumbersStartScaleLine = 0;
             this.analogGauge7.ScaleNumbersStepScaleLines = 1;
             this.analogGauge7.Size = new System.Drawing.Size(175, 124);
-            this.analogGauge7.TabIndex = 24;
+            this.analogGauge7.TabIndex = 25;
+            this.analogGauge7.TabStop = false;
             this.analogGauge7.Text = "aGauge11";
             this.analogGauge7.Value = 0F;
             // 
@@ -1546,7 +1550,8 @@ namespace LoggerMonitor
             this.analogGauge6.ScaleNumbersStartScaleLine = 0;
             this.analogGauge6.ScaleNumbersStepScaleLines = 1;
             this.analogGauge6.Size = new System.Drawing.Size(175, 124);
-            this.analogGauge6.TabIndex = 19;
+            this.analogGauge6.TabIndex = 24;
+            this.analogGauge6.TabStop = false;
             this.analogGauge6.Text = "aGauge10";
             this.analogGauge6.Value = 0F;
             // 
@@ -1654,6 +1659,7 @@ namespace LoggerMonitor
             this.analogGauge5.ScaleNumbersStepScaleLines = 1;
             this.analogGauge5.Size = new System.Drawing.Size(175, 124);
             this.analogGauge5.TabIndex = 23;
+            this.analogGauge5.TabStop = false;
             this.analogGauge5.Text = "aGauge9";
             this.analogGauge5.Value = 0F;
             // 
@@ -1760,7 +1766,8 @@ namespace LoggerMonitor
             this.analogGauge4.ScaleNumbersStartScaleLine = 0;
             this.analogGauge4.ScaleNumbersStepScaleLines = 1;
             this.analogGauge4.Size = new System.Drawing.Size(175, 124);
-            this.analogGauge4.TabIndex = 18;
+            this.analogGauge4.TabIndex = 22;
+            this.analogGauge4.TabStop = false;
             this.analogGauge4.Text = "aGauge8";
             this.analogGauge4.Value = 0F;
             // 
@@ -1867,7 +1874,8 @@ namespace LoggerMonitor
             this.analogGauge3.ScaleNumbersStartScaleLine = 0;
             this.analogGauge3.ScaleNumbersStepScaleLines = 1;
             this.analogGauge3.Size = new System.Drawing.Size(175, 124);
-            this.analogGauge3.TabIndex = 22;
+            this.analogGauge3.TabIndex = 21;
+            this.analogGauge3.TabStop = false;
             this.analogGauge3.Text = "aGauge7";
             this.analogGauge3.Value = 0F;
             // 
@@ -1974,7 +1982,8 @@ namespace LoggerMonitor
             this.analogGauge2.ScaleNumbersStartScaleLine = 0;
             this.analogGauge2.ScaleNumbersStepScaleLines = 1;
             this.analogGauge2.Size = new System.Drawing.Size(175, 124);
-            this.analogGauge2.TabIndex = 17;
+            this.analogGauge2.TabIndex = 20;
+            this.analogGauge2.TabStop = false;
             this.analogGauge2.Text = "aGauge6";
             this.analogGauge2.Value = 0F;
             // 
@@ -2081,7 +2090,8 @@ namespace LoggerMonitor
             this.analogGauge1.ScaleNumbersStartScaleLine = 0;
             this.analogGauge1.ScaleNumbersStepScaleLines = 1;
             this.analogGauge1.Size = new System.Drawing.Size(175, 124);
-            this.analogGauge1.TabIndex = 21;
+            this.analogGauge1.TabIndex = 19;
+            this.analogGauge1.TabStop = false;
             this.analogGauge1.Text = "aGauge5";
             this.analogGauge1.Value = 0F;
             // 
@@ -2188,7 +2198,8 @@ namespace LoggerMonitor
             this.rpmGauge4.ScaleNumbersStartScaleLine = 0;
             this.rpmGauge4.ScaleNumbersStepScaleLines = 1;
             this.rpmGauge4.Size = new System.Drawing.Size(220, 195);
-            this.rpmGauge4.TabIndex = 10;
+            this.rpmGauge4.TabIndex = 18;
+            this.rpmGauge4.TabStop = false;
             this.rpmGauge4.Text = "aGauge4";
             this.rpmGauge4.Value = 0F;
             // 
@@ -2295,7 +2306,8 @@ namespace LoggerMonitor
             this.rpmGauge3.ScaleNumbersStartScaleLine = 0;
             this.rpmGauge3.ScaleNumbersStepScaleLines = 1;
             this.rpmGauge3.Size = new System.Drawing.Size(220, 195);
-            this.rpmGauge3.TabIndex = 9;
+            this.rpmGauge3.TabIndex = 17;
+            this.rpmGauge3.TabStop = false;
             this.rpmGauge3.Text = "aGauge3";
             this.rpmGauge3.Value = 0F;
             // 
@@ -2402,7 +2414,8 @@ namespace LoggerMonitor
             this.rpmGauge2.ScaleNumbersStartScaleLine = 0;
             this.rpmGauge2.ScaleNumbersStepScaleLines = 1;
             this.rpmGauge2.Size = new System.Drawing.Size(220, 195);
-            this.rpmGauge2.TabIndex = 8;
+            this.rpmGauge2.TabIndex = 16;
+            this.rpmGauge2.TabStop = false;
             this.rpmGauge2.Text = "aGauge2";
             this.rpmGauge2.Value = 0F;
             // 
@@ -2510,7 +2523,8 @@ namespace LoggerMonitor
             this.rpmGauge1.ScaleNumbersStartScaleLine = 0;
             this.rpmGauge1.ScaleNumbersStepScaleLines = 1;
             this.rpmGauge1.Size = new System.Drawing.Size(220, 195);
-            this.rpmGauge1.TabIndex = 7;
+            this.rpmGauge1.TabIndex = 15;
+            this.rpmGauge1.TabStop = false;
             this.rpmGauge1.Text = "aGauge1";
             this.rpmGauge1.Value = 0F;
             // 
@@ -2536,7 +2550,6 @@ namespace LoggerMonitor
             this.Controls.Add(this.gauge1_label);
             this.Controls.Add(this.secs_heading_label);
             this.Controls.Add(this.secsLabel);
-            this.Controls.Add(this.label1);
             this.Controls.Add(this.addGauge8);
             this.Controls.Add(this.addGauge7);
             this.Controls.Add(this.addGauge6);
@@ -2568,7 +2581,6 @@ namespace LoggerMonitor
             this.MinimumSize = new System.Drawing.Size(79, 89);
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = $"{name.Name}, Version {name.Version}";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
@@ -2610,7 +2622,6 @@ namespace LoggerMonitor
 		private AGauge addGauge7;
 		private AGauge addGauge8;
 		private System.Windows.Forms.Timer readComTimer;
-		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.Label secsLabel;
 		private System.Windows.Forms.Label secs_heading_label;
 		private System.Windows.Forms.Label gauge1_label;

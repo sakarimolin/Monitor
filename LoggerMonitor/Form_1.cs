@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using System.Reflection;
 using System.Windows.Forms;
 
 
@@ -36,6 +37,9 @@ namespace LoggerMonitor
         public Form1()
         {
             InitializeComponent();
+            var asmName = Assembly.GetExecutingAssembly().GetName();
+            this.Text = $"{asmName.Name}, Version {asmName.Version} Copyright  © S.Molin, 2024.";
+
             sets.Init();
             int port = sets.port;
 
@@ -887,7 +891,6 @@ namespace LoggerMonitor
 
         private void readLoggerTimer_Tick(object sender, EventArgs e)
         {
-            readLoggerTimer.Start();
             string rLine;
             var voltagesRead = false;
             rLine = ReadLoggerData();
@@ -896,6 +899,7 @@ namespace LoggerMonitor
                 rLine += ReadLoggerData();
             }
             linesRead++;
+            readLoggerTimer.Start();
             if (rLine.Contains("DataValues"))
             {
                 readErrorCount = 0;
@@ -939,14 +943,14 @@ namespace LoggerMonitor
                 if (rLine.Length < 5)
                     System.Threading.Thread.Sleep(NoDataSleepMs);
             }
-            if(readErrorCount > 9)
+            if(readErrorCount > 19)
             {
                 StopMonitor_button_Click(this, EventArgs.Empty);
                 if (readLoggerTimer != null)
                     readLoggerTimer.Stop();
                 if (initLoggerTimer != null)
                     initLoggerTimer.Stop();
-                MessageBox.Show($"Reading data from Logger failed {readErrorCount} times. Closing connection...");
+                MessageBox.Show($"Reading Logger failed {readErrorCount} times. Closing connection...");
             }
             else
             {
