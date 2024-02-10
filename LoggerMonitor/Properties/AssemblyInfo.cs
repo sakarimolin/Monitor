@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Molin")]
 [assembly: AssemblyProduct("LoggerMonitor")]
-[assembly: AssemblyCopyright("Copyright © S.Molin 2022")]
+[assembly: AssemblyCopyright("Copyright © S.Molin 2024")]
 [assembly: AssemblyTrademark("S.Molin")]
 [assembly: AssemblyCulture("")]
 
@@ -32,6 +32,6 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("2024.02.04.3214")]
-[assembly: AssemblyFileVersion("3.2.1.4")]
+[assembly: AssemblyVersion("2024.02.10.3215")]
+[assembly: AssemblyFileVersion("3.2.1.5")]
 [assembly: NeutralResourcesLanguage("en-US")]

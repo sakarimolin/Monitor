@@ -218,10 +218,10 @@ namespace LoggerMonitor
                 var ipv4Addresses = ip.Where(i => i.AddressFamily == AddressFamily.InterNetwork).Select(i => i).ToList();
                 var ipv6Addresses = ip.Where(i => i.AddressFamily == AddressFamily.InterNetworkV6).Select(i => i).ToList();
 
-                var ipv4Found = false;
-                var ipv6Found = IPv6ConnectToClient(ipv6Addresses, port);
-                if (!ipv6Found)
-                    ipv4Found = IPv4ConnectToClient(ipv4Addresses, port);
+                var ipv6Found = false;
+                var ipv4Found = IPv4ConnectToClient(ipv4Addresses, port); 
+                if (!ipv4Found)
+                    ipv6Found = IPv6ConnectToClient(ipv6Addresses, port);
 
                 if (!ipv4Found && !ipv6Found)
                 {
