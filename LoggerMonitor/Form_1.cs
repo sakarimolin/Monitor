@@ -828,8 +828,7 @@ namespace LoggerMonitor
         }
 
         private void numericUpDown1_ValueChanged(object sender, EventArgs e)
-        {
-            
+        {            
             decimal value = numericUpDown1.Value;
             // scroll downwards, jump logarithmic way
             if (numericUpDown1.Value == 1.9m)
@@ -944,7 +943,7 @@ namespace LoggerMonitor
                 if (rLine.Length < 5)
                     System.Threading.Thread.Sleep(NoDataSleepMs);
             }
-            if(readErrorCount > 19)
+            if(readErrorCount > 5)
             {
                 StopMonitor_button_Click(this, EventArgs.Empty);
                 if (readLoggerTimer != null)
