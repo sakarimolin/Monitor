@@ -1192,7 +1192,7 @@ namespace LoggerMonitor
                     var max = Convert.ToDouble(items[2 * i + 10], CultureInfo.InvariantCulture);
                     if(min < -1000)
                         min = 0.0;
-                    if(max > 1000)
+                    if(max > 50000)
                         max = 1000.0;
                     if (min == max)
                         max = min + 100.0;
