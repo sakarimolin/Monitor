@@ -3,6 +3,11 @@ using System.Globalization;
 
 namespace LoggerMonitor
 {
+    public enum maxCount :int
+    { 
+        Analog = 32 
+    };
+
     public class limits
     {
         public string name;
@@ -10,7 +15,7 @@ namespace LoggerMonitor
         public double max;
         public double multiplier;
         public double zeroValue;
-
+        public int analogCount;
         public limits()
         {
             min = 0;
@@ -18,11 +23,14 @@ namespace LoggerMonitor
             multiplier = 1.0;
             zeroValue = 0.0;
             name = "";
+            analogCount = (int)maxCount.Analog;
         }
     }
 
     class raceFileClass : TextFile
     {
+        public const int maxAnalog = 32;
+
         public int[] RPM;
         public int[] Analog;
         public double[] AnalogDouble;
@@ -39,9 +47,9 @@ namespace LoggerMonitor
         public raceFileClass()
         {
             RPM = new int[4];
-            Analog = new Int32[16];
-            AnalogDouble = new double[16];
-            AnalogVoltage = new double[16];
+            Analog = new Int32[maxAnalog];
+            AnalogDouble = new double[maxAnalog];
+            AnalogVoltage = new double[maxAnalog];
             Acceleration = new double[4];
             onOff = new bool[4];
             RPMLimit = new limits[4];
@@ -53,8 +61,8 @@ namespace LoggerMonitor
                 rl.min = 0;
                 rl.max = 10000;
             }
-            AnalogLimit = new limits[16];
-            for (int i = 0; i < 16; i++)
+            AnalogLimit = new limits[maxAnalog];
+            for (int i = 0; i < maxAnalog; i++)
                 AnalogLimit[i] = new limits();
 
             foreach (var al in AnalogLimit)
@@ -150,7 +158,10 @@ namespace LoggerMonitor
             int memberCount = 0;
             char delimiterChar = ';';
             string[] item = line.Split(delimiterChar);
-            memberCount = item.Length;      // should be 1 + 4 + 4 + 16 = 25
+            memberCount = item.Length;      // should be 1 + 4 + 4 + 16 = 25, or 8 or 16 more --> 33 or 41
+            if (memberCount > (9 + 32))
+                memberCount = (9 + 32);
+            var adcCount = memberCount - 9;
 
             for (int i = 0; i < 4; i++)
             {
@@ -174,7 +185,7 @@ namespace LoggerMonitor
                     onOff[i] = false;
                 }
             }
-            for (int i = 0; i < 16; i++)
+            for (int i = 0; i < adcCount; i++)
             {
                 try
                 {
@@ -193,7 +204,10 @@ namespace LoggerMonitor
             int memberCount = 0;
             char delimiterChar = ';';
             string[] item = line.Split(delimiterChar);
-            memberCount = item.Length;      // should be 1 + 4 + 4 + 16 = 25
+            memberCount = item.Length;      // should be 1 + 4 + 4 + 16 = 25, or 8 or 16 more --> 33 or 41
+            if (memberCount > (9 + 32))
+                memberCount = (9 + 32);
+            var adcCount = memberCount - 9;
 
             for (int i = 0; i < 4; i++)
             {
@@ -217,7 +231,7 @@ namespace LoggerMonitor
                     onOff[i] = false;
                 }
             }
-            for (int i = 0; i < 16; i++)
+            for (int i = 0; i < adcCount; i++)
             {
                 try
                 {

@@ -16,7 +16,7 @@ namespace LoggerMonitor
 {
     public partial class Form1 : Form
     {
-        public  Stream raceFileStr = null;
+        public Stream raceFileStr = null;
         raceFileClass rFile;
         raceFileClass monFile;
         Settings1 sets = new Settings1();
@@ -39,7 +39,7 @@ namespace LoggerMonitor
         {
             InitializeComponent();
             var asmName = Assembly.GetExecutingAssembly().GetName();
-            this.Text = $"{asmName.Name}, Version {asmName.Version} Copyright  © S.Molin, 2024.";
+            this.Text = $"{asmName.Name}, Version {asmName.Version} Copyright  © S.Molin, 2025.";
 
             sets.Init();
             int port = sets.port;
@@ -67,7 +67,7 @@ namespace LoggerMonitor
 
             int tIndex = sets.first_temp_sensor_index;
             analogGauge1.CapText = formCapText(tIndex, 0);
-			tIndex++;
+            tIndex++;
             analogGauge2.CapText = formCapText(tIndex, 0);
             tIndex++;
             analogGauge3.CapText = formCapText(tIndex, 0);
@@ -214,12 +214,12 @@ namespace LoggerMonitor
 
                 var ip = Dns.GetHostAddresses(loggerName);
                 logTextBox.AppendText($"1st Found {ip.Length} IP addresses. ");
-                
+
                 var ipv4Addresses = ip.Where(i => i.AddressFamily == AddressFamily.InterNetwork).Select(i => i).ToList();
                 var ipv6Addresses = ip.Where(i => i.AddressFamily == AddressFamily.InterNetworkV6).Select(i => i).ToList();
 
                 var ipv6Found = false;
-                var ipv4Found = IPv4ConnectToClient(ipv4Addresses, port); 
+                var ipv4Found = IPv4ConnectToClient(ipv4Addresses, port);
                 if (!ipv4Found)
                     ipv6Found = IPv6ConnectToClient(ipv6Addresses, port);
 
@@ -262,7 +262,7 @@ namespace LoggerMonitor
                 while (--trials > 0)
                 {
                     if (!nwStream.DataAvailable)
-                        System.Threading.Thread.Sleep(200);
+                        System.Threading.Thread.Sleep(500);
                     else
                         break;
                 }
@@ -314,7 +314,7 @@ namespace LoggerMonitor
                 logTextBox.AppendText("SocketException: " + e2.Message);
             }
         }
-               
+
         private void StartMonitor_button_Click(object sender, EventArgs e)
         {
             bool status = true;
@@ -333,7 +333,7 @@ namespace LoggerMonitor
             {
                 status = startSession();
                 int sesSta = readComAll();
-                if(status == false)
+                if (status == false)
                     MessageBox.Show("Error: Could not start terminal connection.");
             }
             else
@@ -345,7 +345,7 @@ namespace LoggerMonitor
                 }
                 MessageBox.Show("Error: Could not open terminal connection.");
             }
-            if (status == true )
+            if (status == true)
                 status = sendMonitorCommand();
 
             if (status == true)
@@ -405,7 +405,7 @@ namespace LoggerMonitor
             StopMonitor_button_Click(sender, e);
             if (this.rFile != null)
                 rFile.Close();
-            if(logFile != null)
+            if (logFile != null)
             {
                 logFile.Close();
                 logFile.Dispose();
@@ -414,29 +414,9 @@ namespace LoggerMonitor
             Close();
         }
 
-        private void ComPort_button_Click(object sender, EventArgs e)
-        {
-            Form2 ComSets = new Form2();
-            int comPortIndex = 0;
-            string comPort;
-            DialogResult result;
-            ComSets.ComPort_InitPortSpeed(sets.port_speed);
-            ComSets.ComPort_InitPortNbr(sets.port - 1);
-            ComSets.CarNameInit(sets.vehicleName);
-
-            result = ComSets.ShowDialog();
-            if( result == DialogResult.OK ) {
-                comPortIndex = ComSets.ComPort_ReadPortNbr();
-                sets.port = comPortIndex + 1;
-                comPort = ComSets.comPort;
-                sets.port_speed = ComSets.ComPort_ReadPortSpeed();
-                sets.vehicleName = ComSets.CarNameRead();
-            }
-        }
-
         private void LogComp_button_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Not implemented yet." );
+            MessageBox.Show("Not implemented yet.");
         }
 
         private void Sensor_button_Click(object sender, EventArgs e)
@@ -461,7 +441,7 @@ namespace LoggerMonitor
 
                 try
                 {
-                    if ((raceFileStr = openFileDialog1.OpenFile( )) != null)
+                    if ((raceFileStr = openFileDialog1.OpenFile()) != null)
                     {
                         // Insert code to read the stream here.
                         string fName = Convert.ToString(openFileDialog1.FileName);
@@ -470,7 +450,7 @@ namespace LoggerMonitor
                         //rFile.Open(openFileDialog1.FileName);
                         rFile.Open(fName);
                         int count = rFile.ReadOneLine();
-                        if (count > 10) 
+                        if (count > 10)
                             count = rFile.ParseLine();
                         int time = rFile.ms;
                         if (time == 0 || time > 1000)
@@ -499,7 +479,7 @@ namespace LoggerMonitor
             decimal dTime = time / numericUpDown1.Value;
             time = System.Convert.ToInt32(dTime);
 
-            seconds = (float)(rFile.ms2 - 1000)/1000.0f;
+            seconds = (float)(rFile.ms2 - 1000) / 1000.0f;
             string s = seconds.ToString();
             secsLabel.Text = s;
             updateScreenTimer.Interval = time;
@@ -539,7 +519,7 @@ namespace LoggerMonitor
         {
             if (serialPort1.IsOpen == true)
                 serialPort1.Close();
-            string name = "COM" + System.Convert.ToString( sets.port );
+            string name = "COM" + System.Convert.ToString(sets.port);
             serialPort1.PortName = name;
             if (sets.port_speed == 2)
                 serialPort1.BaudRate = 38400;
@@ -551,7 +531,7 @@ namespace LoggerMonitor
             serialPort1.ReadTimeout = 1;
             serialPort1.Parity = System.IO.Ports.Parity.Even;
             serialPort1.StopBits = System.IO.Ports.StopBits.Two;
-            
+
             serialPort1.NewLine = "\r";
         }
 
@@ -605,7 +585,7 @@ namespace LoggerMonitor
                     if (rLine.Contains(":RACE"))
                         stat1 = 6;
                 }
-                catch (TimeoutException )
+                catch (TimeoutException)
                 {
                 }
             }
@@ -627,7 +607,7 @@ namespace LoggerMonitor
                     else if (rLine.Length > 10)
                         retLine = rLine;
                 }
-                catch (TimeoutException )
+                catch (TimeoutException)
                 {
                 }
                 catch (Exception ex)
@@ -717,14 +697,15 @@ namespace LoggerMonitor
             tmpIndex++;
             value = displayAnalogValueInt(analogGauge8, raceFile, tmpIndex, sets.analog_value_2, sets.temp_2, multip);
 
-            float [] volt = new float[8];
+            float[] volt = new float[8];
             int aIndex = 0;
             for (int i = 0; i < 8; i++)
             {
                 volt[i] = raceFile.Analog[sets.first_analog_index + i] * 5.0F / 0x20000;
             }
-            float [] val = new float[8];
-            for( int i = 0; i < 8; i++ ){
+            float[] val = new float[8];
+            for (int i = 0; i < 8; i++)
+            {
                 aIndex = sets.first_analog_index + i;
                 val[i] = (float)(volt[i] - sets.analog1.getVolt2(aIndex))
                             / sets.analog1.getMultip(aIndex) + sets.analog1.getVal2(aIndex);
@@ -828,7 +809,7 @@ namespace LoggerMonitor
         }
 
         private void numericUpDown1_ValueChanged(object sender, EventArgs e)
-        {            
+        {
             decimal value = numericUpDown1.Value;
             // scroll downwards, jump logarithmic way
             if (numericUpDown1.Value == 1.9m)
@@ -843,7 +824,7 @@ namespace LoggerMonitor
                 numericUpDown1.Value = 2m;
 
         }
-        
+
         private void Form1_Load(object sender, EventArgs e)
         {
         }
@@ -879,11 +860,11 @@ namespace LoggerMonitor
                 UpdateGaugeLimits(rLine);
                 initLoggerTimer.Stop();
             }
-            else 
+            else
             {
                 logTextBox.AppendText($"Received response:'{rLine}'");
             }
-            if(logFile != null)
+            if (logFile != null)
             {
                 logFile.WriteLine(rLine);
             }
@@ -904,14 +885,14 @@ namespace LoggerMonitor
             {
                 readErrorCount = 0;
                 monFile.wLine = rLine;  // store to disk
-                if(linesRead % 20 == 0)
+                if (linesRead % 20 == 0)
                     monFile.WriteOneLine();
 
                 monFile.line = rLine;
                 int count1 = monFile.ParseLoggerLine();
                 if (count1 > 10 & !voltageView) // don't update gauges here, if voltage view selected
                 {
-                    UpdateLoggerGauges(monFile);
+                    UpdateLoggerGauges(monFile, count1);
                 }
                 if (logFile != null)
                 {
@@ -929,7 +910,7 @@ namespace LoggerMonitor
                 int count1 = monFile.ParseLoggerVoltages();
                 if (count1 > 10)
                 {
-                    UpdateLoggerGauges(monFile);
+                    UpdateLoggerGauges(monFile, count1);
                 }
                 if (logFile != null)
                 {
@@ -943,7 +924,7 @@ namespace LoggerMonitor
                 if (rLine.Length < 5)
                     System.Threading.Thread.Sleep(NoDataSleepMs);
             }
-            if(readErrorCount > 5)
+            if (readErrorCount > 5)
             {
                 StopMonitor_button_Click(this, EventArgs.Empty);
                 if (readLoggerTimer != null)
@@ -954,7 +935,9 @@ namespace LoggerMonitor
             }
             else
             {
-                if(voltageView & !voltagesRead)
+                System.Threading.Thread.Sleep(30);
+
+                if (voltageView & !voltagesRead)
                     loggerMonitorStarted = SendLoggerDataRequest("VoltageRequest");
                 else
                     loggerMonitorStarted = SendLoggerDataRequest("DataRequest");
@@ -963,7 +946,7 @@ namespace LoggerMonitor
                 readErrorCount--;
         }
 
-        private void UpdateLoggerGauges(raceFileClass raceFile)
+        private void UpdateLoggerGauges(raceFileClass raceFile, int itemCount)
         {
             string vText;
 
@@ -1016,36 +999,37 @@ namespace LoggerMonitor
                 analogGauge8.CapText = formLoggerCapText(7);
             }
 
-            addGauge1.Value = (float)raceFile.AnalogDouble[8];
-            addGauge2.Value = (float)raceFile.AnalogDouble[9];
-            addGauge3.Value = (float)raceFile.AnalogDouble[10];
-            addGauge4.Value = (float)raceFile.AnalogDouble[11];
-            addGauge5.Value = (float)raceFile.AnalogDouble[12];
-            addGauge6.Value = (float)raceFile.AnalogDouble[13];
-            addGauge7.Value = (float)raceFile.AnalogDouble[14];
-            addGauge8.Value = (float)raceFile.AnalogDouble[15];
+            int firstAddIndex = (int)addGaugesUpDown.Value - 1;
+            addGauge1.Value = (float)raceFile.AnalogDouble[firstAddIndex];
+            addGauge2.Value = (float)raceFile.AnalogDouble[firstAddIndex + 1];
+            addGauge3.Value = (float)raceFile.AnalogDouble[firstAddIndex + 2];
+            addGauge4.Value = (float)raceFile.AnalogDouble[firstAddIndex + 3];
+            addGauge5.Value = (float)raceFile.AnalogDouble[firstAddIndex + 4];
+            addGauge6.Value = (float)raceFile.AnalogDouble[firstAddIndex + 5];
+            addGauge7.Value = (float)raceFile.AnalogDouble[firstAddIndex + 6];
+            addGauge8.Value = (float)raceFile.AnalogDouble[firstAddIndex + 7];
 
             if (voltageView)
             {
-                addGauge1.CapText = formLoggerCapVoltageText(8);
-                addGauge2.CapText = formLoggerCapVoltageText(9);
-                addGauge3.CapText = formLoggerCapVoltageText(10);
-                addGauge4.CapText = formLoggerCapVoltageText(11);
-                addGauge5.CapText = formLoggerCapVoltageText(12);
-                addGauge6.CapText = formLoggerCapVoltageText(13);
-                addGauge7.CapText = formLoggerCapVoltageText(14);
-                addGauge8.CapText = formLoggerCapVoltageText(15);
+                addGauge1.CapText = formLoggerCapVoltageText(firstAddIndex);
+                addGauge2.CapText = formLoggerCapVoltageText(firstAddIndex + 1);
+                addGauge3.CapText = formLoggerCapVoltageText(firstAddIndex + 2);
+                addGauge4.CapText = formLoggerCapVoltageText(firstAddIndex + 3);
+                addGauge5.CapText = formLoggerCapVoltageText(firstAddIndex + 4);
+                addGauge6.CapText = formLoggerCapVoltageText(firstAddIndex + 5);
+                addGauge7.CapText = formLoggerCapVoltageText(firstAddIndex + 6);
+                addGauge8.CapText = formLoggerCapVoltageText(firstAddIndex + 7);
             }
             else
             {
-                addGauge1.CapText = formLoggerCapText(8);
-                addGauge2.CapText = formLoggerCapText(9);
-                addGauge3.CapText = formLoggerCapText(10);
-                addGauge4.CapText = formLoggerCapText(11);
-                addGauge5.CapText = formLoggerCapText(12);
-                addGauge6.CapText = formLoggerCapText(13);
-                addGauge7.CapText = formLoggerCapText(14);
-                addGauge8.CapText = formLoggerCapText(15);
+                addGauge1.CapText = formLoggerCapText(firstAddIndex);
+                addGauge2.CapText = formLoggerCapText(firstAddIndex + 1);
+                addGauge3.CapText = formLoggerCapText(firstAddIndex + 2);
+                addGauge4.CapText = formLoggerCapText(firstAddIndex + 3);
+                addGauge5.CapText = formLoggerCapText(firstAddIndex + 4);
+                addGauge6.CapText = formLoggerCapText(firstAddIndex + 5);
+                addGauge7.CapText = formLoggerCapText(firstAddIndex + 6);
+                addGauge8.CapText = formLoggerCapText(firstAddIndex + 7);
             }
         }
 
@@ -1060,8 +1044,8 @@ namespace LoggerMonitor
         private string formLoggerCapVoltageText(int index)
         {   // name + current voltage after it.
             //Byte[] name = System.Text.Encoding.ASCII.GetBytes(monFile.AnalogLimit[index].name);
-           string reString = $"{monFile.AnalogLimit[index].name} : {monFile.AnalogVoltage[index]:F3} V";
-           return reString;
+            string reString = $"{monFile.AnalogLimit[index].name} : {monFile.AnalogVoltage[index]:F3} V";
+            return reString;
         }
 
         private bool SendLoggerDataRequest(string request)
@@ -1074,7 +1058,7 @@ namespace LoggerMonitor
                 nwStream.Write(wBuffer, 0, wBuffer.Length);
                 status = true;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show("Exception in sending data request to Logger. Original error: " + ex.Message);
             }
@@ -1140,9 +1124,9 @@ namespace LoggerMonitor
         {
             var items = settings.Split(';');
 
-            if (items[0].Contains("HeaderItems")) 
+            if (items[0].Contains("HeaderItems"))
             {
-                if(items.Count() >= (1 + 4 + 4 + 16))
+                if (items.Count() >= (1 + 4 + 4 + 16))
                 {
                     var i = 0;
                     for (i = 0; i < 4; i++)
@@ -1153,7 +1137,7 @@ namespace LoggerMonitor
                     {
                         monFile.OnOffName[i] = items[i + 5];
                     }
-                    for (i = 0; i < 16; i++)
+                    for (i = 0; i < items.Count() - 9; i++)
                     {
                         monFile.AnalogLimit[i].name = items[i + 9];
                     }
@@ -1177,129 +1161,152 @@ namespace LoggerMonitor
                 {
                     var min = (float)Convert.ToDouble(items[2 * i + 1], CultureInfo.InvariantCulture);
                     var max = (float)Convert.ToDouble(items[2 * i + 2], CultureInfo.InvariantCulture);
-                    if(min < 10000)
+                    if (min < 10000)
                         min = 0;
-                    if(max > 20000)
+                    if (max > 20000)
                         max = 10000;
                     if (min == max)
                         max = min + 10000;
                     monFile.RPMLimit[i].min = min;
                     monFile.RPMLimit[i].max = max;
                 }
-                for (i = 0; i < 16; i++)
+                int firstAddIndex = (int)addGaugesUpDown.Value - 1;
+                var analogCount = (items.Count() - 9) / 2;
+                for (i = 0; i < analogCount; i++)
                 {
                     var min = Convert.ToDouble(items[2 * i + 9], CultureInfo.InvariantCulture);
                     var max = Convert.ToDouble(items[2 * i + 10], CultureInfo.InvariantCulture);
-                    if(min < -1000)
+                    if (min < -1000)
                         min = 0.0;
-                    if(max > 50000)
+                    if (max > 50000)
                         max = 1000.0;
                     if (min == max)
                         max = min + 100.0;
                     if (max == 1)
                         max = 2.0;
-                    if(max < min)
+                    if (max < min)
                     {
                         var m = max;
                         max = min;
                         min = m;
                     }
-                        
+
                     monFile.AnalogLimit[i].min = min;
                     monFile.AnalogLimit[i].max = max;
 
                     var majorStep = (max - min) / 5;
                     majorStep = Math.Round(majorStep, 2);
                     majorStep = Math.Abs(majorStep);
-                    switch (i)
+
+                    max = Math.Round(max, 2);   // why ??
+                    if (i < 8)
                     {
-                        case 0:
-                            analogGauge1.MaxValue = (float)max;
-                            analogGauge1.MinValue = (float)min;
-                            analogGauge1.ScaleLinesMajorStepValue = (float)majorStep;
-                            break;
-                        case 01:
-                            analogGauge2.MaxValue = (float)max;
-                            analogGauge2.MinValue = (float)min;
-                            analogGauge2.ScaleLinesMajorStepValue = (float)majorStep;
-                            break;
-                        case 02:
-                            analogGauge3.MaxValue = (float)max;
-                            analogGauge3.MinValue = (float)min;
-                            analogGauge3.ScaleLinesMajorStepValue = (float)majorStep;
-                            break;
-                        case 03:
-                            analogGauge4.MaxValue = (float)max;
-                            analogGauge4.MinValue = (float)min;
-                            analogGauge4.ScaleLinesMajorStepValue = (float)majorStep;
-                            break;
-                        case 04:
-                            analogGauge5.MaxValue = (float)max;
-                            analogGauge5.MinValue = (float)min;
-                            analogGauge5.ScaleLinesMajorStepValue = (float)majorStep;
-                            break;
-                        case 05:
-                            analogGauge6.MaxValue = (float)max;
-                            analogGauge6.MinValue = (float)min;
-                            analogGauge6.ScaleLinesMajorStepValue = (float)majorStep;
-                            break;
-                        case 06:
-                            analogGauge7.MaxValue = (float)max;
-                            analogGauge7.MinValue = (float)min;
-                            analogGauge7.ScaleLinesMajorStepValue = (float)majorStep;
-                            break;
-                        case 07:
-                            analogGauge8.MaxValue = (float)max;
-                            analogGauge8.MinValue = (float)min;
-                            analogGauge8.ScaleLinesMajorStepValue = (float)majorStep;
-                            break;
-                        case 08:
-                            addGauge1.MaxValue = (float)max;
-                            addGauge1.MinValue = (float)min;
-                            addGauge1.ScaleLinesMajorStepValue = (float)majorStep;
-                            break;
-                        case 09:
-                            max = Math.Round(max, 2);
-                            addGauge2.MaxValue = ((float)max);
-                            addGauge2.MinValue = ((float)min);
-                            addGauge2.ScaleLinesMajorStepValue = (float)majorStep;
-                            break;
-                        case 10:
-                            addGauge3.MaxValue = (float)max;
-                            addGauge3.MinValue = (float)min;
-                            addGauge3.ScaleLinesMajorStepValue = (float)majorStep;
-                            break;
-                        case 11:
-                            addGauge4.MaxValue = (float)max;
-                            addGauge4.MinValue = (float)min;
-                            addGauge4.ScaleLinesMajorStepValue = (float)majorStep;
-                            break;
-                        case 12:
-                            addGauge5.MaxValue = (float)max;
-                            addGauge5.MinValue = (float)min;
-                            addGauge5.ScaleLinesMajorStepValue = (float)majorStep;
-                            break;
-                        case 13:
-                            addGauge6.MaxValue = (float)max;
-                            addGauge6.MinValue = (float)min;
-                            addGauge6.ScaleLinesMajorStepValue = (float)majorStep;
-                            break;
-                        case 14:
-                            addGauge7.MaxValue = (float)max;
-                            addGauge7.MinValue = (float)min;
-                            addGauge7.ScaleLinesMajorStepValue = (float)majorStep;
-                            break;
-                        case 15:
-                            addGauge8.MaxValue = (float)max;
-                            addGauge8.MinValue = (float)min;
-                            addGauge8.ScaleLinesMajorStepValue = (float)majorStep;
-                            break;
+                        UpdateAnalogGaugeLimitsToScreen(i, min, max, majorStep);
+                    }
+                    if (i >= firstAddIndex)
+                    {
+                        UpdateAddGaugeLimitsToScreen(i, min, max, majorStep);
                     }
                 }
                 updateGauges(monFile);
             }
             var status = SendLoggerDataRequest("DataRequest");
             readLoggerTimer.Start();
+        }
+
+        private void UpdateAnalogGaugeLimitsToScreen(int gaugeIndex, double min, double max, double majorStep)
+        {
+            switch (gaugeIndex)
+            {
+                case 0:
+                    analogGauge1.MaxValue = (float)max;
+                    analogGauge1.MinValue = (float)min;
+                    analogGauge1.ScaleLinesMajorStepValue = (float)majorStep;
+                    break;
+                case 01:
+                    analogGauge2.MaxValue = (float)max;
+                    analogGauge2.MinValue = (float)min;
+                    analogGauge2.ScaleLinesMajorStepValue = (float)majorStep;
+                    break;
+                case 02:
+                    analogGauge3.MaxValue = (float)max;
+                    analogGauge3.MinValue = (float)min;
+                    analogGauge3.ScaleLinesMajorStepValue = (float)majorStep;
+                    break;
+                case 03:
+                    analogGauge4.MaxValue = (float)max;
+                    analogGauge4.MinValue = (float)min;
+                    analogGauge4.ScaleLinesMajorStepValue = (float)majorStep;
+                    break;
+                case 04:
+                    analogGauge5.MaxValue = (float)max;
+                    analogGauge5.MinValue = (float)min;
+                    analogGauge5.ScaleLinesMajorStepValue = (float)majorStep;
+                    break;
+                case 05:
+                    analogGauge6.MaxValue = (float)max;
+                    analogGauge6.MinValue = (float)min;
+                    analogGauge6.ScaleLinesMajorStepValue = (float)majorStep;
+                    break;
+                case 06:
+                    analogGauge7.MaxValue = (float)max;
+                    analogGauge7.MinValue = (float)min;
+                    analogGauge7.ScaleLinesMajorStepValue = (float)majorStep;
+                    break;
+                case 07:
+                    analogGauge8.MaxValue = (float)max;
+                    analogGauge8.MinValue = (float)min;
+                    analogGauge8.ScaleLinesMajorStepValue = (float)majorStep;
+                    break;
+            }
+        }
+
+        private void UpdateAddGaugeLimitsToScreen(int gaugeIndex, double min, double max, double majorStep)
+        {
+            int firstAddIndex = (int)addGaugesUpDown.Value - 1;
+            switch (gaugeIndex)
+            {
+                case 08:
+                    addGauge1.MaxValue = (float)max;
+                    addGauge1.MinValue = (float)min;
+                    addGauge1.ScaleLinesMajorStepValue = (float)majorStep;
+                    break;
+                case 09:
+                    addGauge2.MaxValue = ((float)max);
+                    addGauge2.MinValue = ((float)min);
+                    addGauge2.ScaleLinesMajorStepValue = (float)majorStep;
+                    break;
+                case 10:
+                    addGauge3.MaxValue = (float)max;
+                    addGauge3.MinValue = (float)min;
+                    addGauge3.ScaleLinesMajorStepValue = (float)majorStep;
+                    break;
+                case 11:
+                    addGauge4.MaxValue = (float)max;
+                    addGauge4.MinValue = (float)min;
+                    addGauge4.ScaleLinesMajorStepValue = (float)majorStep;
+                    break;
+                case 12:
+                    addGauge5.MaxValue = (float)max;
+                    addGauge5.MinValue = (float)min;
+                    addGauge5.ScaleLinesMajorStepValue = (float)majorStep;
+                    break;
+                case 13:
+                    addGauge6.MaxValue = (float)max;
+                    addGauge6.MinValue = (float)min;
+                    addGauge6.ScaleLinesMajorStepValue = (float)majorStep;
+                    break;
+                case 14:
+                    addGauge7.MaxValue = (float)max;
+                    addGauge7.MinValue = (float)min;
+                    addGauge7.ScaleLinesMajorStepValue = (float)majorStep;
+                    break;
+                case 15:
+                    addGauge8.MaxValue = (float)max;
+                    addGauge8.MinValue = (float)min;
+                    addGauge8.ScaleLinesMajorStepValue = (float)majorStep;
+                    break;
+            }
         }
 
         private void logDataButton_Click(object sender, EventArgs e)
@@ -1317,8 +1324,8 @@ namespace LoggerMonitor
             {
                 logging = true;
                 logDataButton.BackColor = System.Drawing.Color.LightGreen;
-                string path =  Environment.GetFolderPath( Environment.SpecialFolder.MyDocuments);
-                path =  path + "\\LoggerMonitor.log";
+                string path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                path = path + "\\LoggerMonitor.log";
                 var logFileStream = new FileStream(path, FileMode.Create);
                 logFile = new StreamWriter(logFileStream);
                 logFile.WriteLine("Monitor log started: " + System.DateTime.Now.ToLongTimeString());
@@ -1336,6 +1343,33 @@ namespace LoggerMonitor
             {
                 voltageView = true;
                 toggleValueButton.BackColor = System.Drawing.Color.LightGreen;
+            }
+        }
+
+        private void addGaugesUpDown_ValueChanged(object sender, EventArgs e)
+        {
+            int firstAddIndex = (int)addGaugesUpDown.Value - 1;
+            //var analogCount = (items.Count() - 9) / 2;
+            for (int i = 0; i < 8; i++)
+            {
+                var min = 0.0;
+                var max = 100.0;
+                if (monFile != null)
+                {
+                    min = monFile.AnalogLimit[firstAddIndex + i].min;
+                    max = monFile.AnalogLimit[firstAddIndex + i].max;
+                }
+
+                var majorStep = (max - min) / 5;
+                majorStep = Math.Round(majorStep, 2);
+                majorStep = Math.Abs(majorStep);
+
+                max = Math.Round(max, 2);
+
+                //if (i >= firstAddIndex && i < firstAddIndex - 8)
+                {
+                    UpdateAddGaugeLimitsToScreen(i + 8, min, max, majorStep);
+                }
             }
         }
     }

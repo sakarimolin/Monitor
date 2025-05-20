@@ -36,11 +36,8 @@ namespace LoggerMonitor
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.updateScreenTimer = new System.Windows.Forms.Timer(this.components);
             this.serialPort1 = new System.IO.Ports.SerialPort(this.components);
-            this.StartMonitor_button = new System.Windows.Forms.Button();
             this.StopMonitor_button = new System.Windows.Forms.Button();
             this.Exit_button = new System.Windows.Forms.Button();
-            this.ComPort_button = new System.Windows.Forms.Button();
-            this.LogComp_button = new System.Windows.Forms.Button();
             this.Sensor_button = new System.Windows.Forms.Button();
             this.Simulate_button = new System.Windows.Forms.Button();
             this.StartLoggerButton = new System.Windows.Forms.Button();
@@ -83,7 +80,10 @@ namespace LoggerMonitor
             this.rpmGauge3 = new LoggerMonitor.AGauge();
             this.rpmGauge2 = new LoggerMonitor.AGauge();
             this.rpmGauge1 = new LoggerMonitor.AGauge();
+            this.addGaugesUpDown = new System.Windows.Forms.NumericUpDown();
+            this.gaugesLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.addGaugesUpDown)).BeginInit();
             this.SuspendLayout();
             // 
             // updateScreenTimer
@@ -98,16 +98,6 @@ namespace LoggerMonitor
             this.serialPort1.Parity = System.IO.Ports.Parity.Even;
             this.serialPort1.StopBits = System.IO.Ports.StopBits.Two;
             // 
-            // StartMonitor_button
-            // 
-            this.StartMonitor_button.Location = new System.Drawing.Point(986, 580);
-            this.StartMonitor_button.Name = "StartMonitor_button";
-            this.StartMonitor_button.Size = new System.Drawing.Size(80, 41);
-            this.StartMonitor_button.TabIndex = 9;
-            this.StartMonitor_button.Text = "Start COM Monitor";
-            this.StartMonitor_button.UseVisualStyleBackColor = true;
-            this.StartMonitor_button.Click += new System.EventHandler(this.StartMonitor_button_Click);
-            // 
             // StopMonitor_button
             // 
             this.StopMonitor_button.Location = new System.Drawing.Point(986, 113);
@@ -120,7 +110,7 @@ namespace LoggerMonitor
             // 
             // Exit_button
             // 
-            this.Exit_button.Location = new System.Drawing.Point(986, 639);
+            this.Exit_button.Location = new System.Drawing.Point(986, 456);
             this.Exit_button.Name = "Exit_button";
             this.Exit_button.Size = new System.Drawing.Size(80, 41);
             this.Exit_button.TabIndex = 4;
@@ -128,29 +118,9 @@ namespace LoggerMonitor
             this.Exit_button.UseVisualStyleBackColor = true;
             this.Exit_button.Click += new System.EventHandler(this.Exit_button_Click);
             // 
-            // ComPort_button
-            // 
-            this.ComPort_button.Location = new System.Drawing.Point(986, 531);
-            this.ComPort_button.Name = "ComPort_button";
-            this.ComPort_button.Size = new System.Drawing.Size(80, 41);
-            this.ComPort_button.TabIndex = 8;
-            this.ComPort_button.Text = "COM Port Settings...";
-            this.ComPort_button.UseVisualStyleBackColor = true;
-            this.ComPort_button.Click += new System.EventHandler(this.ComPort_button_Click);
-            // 
-            // LogComp_button
-            // 
-            this.LogComp_button.Location = new System.Drawing.Point(986, 323);
-            this.LogComp_button.Name = "LogComp_button";
-            this.LogComp_button.Size = new System.Drawing.Size(80, 41);
-            this.LogComp_button.TabIndex = 10;
-            this.LogComp_button.Text = "Race Logger Settings...";
-            this.LogComp_button.UseVisualStyleBackColor = true;
-            this.LogComp_button.Click += new System.EventHandler(this.LogComp_button_Click);
-            // 
             // Sensor_button
             // 
-            this.Sensor_button.Location = new System.Drawing.Point(986, 370);
+            this.Sensor_button.Location = new System.Drawing.Point(986, 303);
             this.Sensor_button.Name = "Sensor_button";
             this.Sensor_button.Size = new System.Drawing.Size(80, 41);
             this.Sensor_button.TabIndex = 7;
@@ -160,7 +130,7 @@ namespace LoggerMonitor
             // 
             // Simulate_button
             // 
-            this.Simulate_button.Location = new System.Drawing.Point(986, 217);
+            this.Simulate_button.Location = new System.Drawing.Point(986, 179);
             this.Simulate_button.Name = "Simulate_button";
             this.Simulate_button.Size = new System.Drawing.Size(80, 41);
             this.Simulate_button.TabIndex = 6;
@@ -180,7 +150,7 @@ namespace LoggerMonitor
             // 
             // logDataButton
             // 
-            this.logDataButton.Location = new System.Drawing.Point(986, 475);
+            this.logDataButton.Location = new System.Drawing.Point(986, 402);
             this.logDataButton.Name = "logDataButton";
             this.logDataButton.Size = new System.Drawing.Size(80, 41);
             this.logDataButton.TabIndex = 45;
@@ -245,7 +215,7 @@ namespace LoggerMonitor
             0,
             0,
             65536});
-            this.numericUpDown1.Location = new System.Drawing.Point(1000, 291);
+            this.numericUpDown1.Location = new System.Drawing.Point(1000, 251);
             this.numericUpDown1.Maximum = new decimal(new int[] {
             2,
             0,
@@ -269,7 +239,7 @@ namespace LoggerMonitor
             // speed_label
             // 
             this.speed_label.AutoSize = true;
-            this.speed_label.Location = new System.Drawing.Point(970, 271);
+            this.speed_label.Location = new System.Drawing.Point(970, 231);
             this.speed_label.Name = "speed_label";
             this.speed_label.Size = new System.Drawing.Size(92, 13);
             this.speed_label.TabIndex = 50;
@@ -315,7 +285,7 @@ namespace LoggerMonitor
             // 
             // toggleValueButton
             // 
-            this.toggleValueButton.Location = new System.Drawing.Point(986, 426);
+            this.toggleValueButton.Location = new System.Drawing.Point(986, 352);
             this.toggleValueButton.Name = "toggleValueButton";
             this.toggleValueButton.Size = new System.Drawing.Size(80, 41);
             this.toggleValueButton.TabIndex = 3;
@@ -397,7 +367,7 @@ namespace LoggerMonitor
             this.addGauge8.CapText = "Add8";
             this.addGauge8.Center = new System.Drawing.Point(10, 75);
             this.addGauge8.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.addGauge8.Location = new System.Drawing.Point(879, 525);
+            this.addGauge8.Location = new System.Drawing.Point(939, 520);
             this.addGauge8.MaxValue = 100F;
             this.addGauge8.MinValue = 0F;
             this.addGauge8.Name = "addGauge8";
@@ -505,7 +475,7 @@ namespace LoggerMonitor
             this.addGauge7.CapText = "Add7";
             this.addGauge7.Center = new System.Drawing.Point(85, 75);
             this.addGauge7.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.addGauge7.Location = new System.Drawing.Point(756, 525);
+            this.addGauge7.Location = new System.Drawing.Point(816, 520);
             this.addGauge7.MaxValue = 100F;
             this.addGauge7.MinValue = 0F;
             this.addGauge7.Name = "addGauge7";
@@ -613,7 +583,7 @@ namespace LoggerMonitor
             this.addGauge6.CapText = "Add6";
             this.addGauge6.Center = new System.Drawing.Point(10, 75);
             this.addGauge6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.addGauge6.Location = new System.Drawing.Point(633, 525);
+            this.addGauge6.Location = new System.Drawing.Point(693, 520);
             this.addGauge6.MaxValue = 100F;
             this.addGauge6.MinValue = 0F;
             this.addGauge6.Name = "addGauge6";
@@ -721,7 +691,7 @@ namespace LoggerMonitor
             this.addGauge5.CapText = "Add5";
             this.addGauge5.Center = new System.Drawing.Point(85, 75);
             this.addGauge5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.addGauge5.Location = new System.Drawing.Point(510, 525);
+            this.addGauge5.Location = new System.Drawing.Point(570, 520);
             this.addGauge5.MaxValue = 100F;
             this.addGauge5.MinValue = 0F;
             this.addGauge5.Name = "addGauge5";
@@ -829,7 +799,7 @@ namespace LoggerMonitor
             this.addGauge4.CapText = "Add4";
             this.addGauge4.Center = new System.Drawing.Point(15, 75);
             this.addGauge4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.addGauge4.Location = new System.Drawing.Point(382, 525);
+            this.addGauge4.Location = new System.Drawing.Point(442, 520);
             this.addGauge4.MaxValue = 100F;
             this.addGauge4.MinValue = 0F;
             this.addGauge4.Name = "addGauge4";
@@ -937,7 +907,7 @@ namespace LoggerMonitor
             this.addGauge3.CapText = "Add3";
             this.addGauge3.Center = new System.Drawing.Point(80, 75);
             this.addGauge3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.addGauge3.Location = new System.Drawing.Point(264, 525);
+            this.addGauge3.Location = new System.Drawing.Point(324, 520);
             this.addGauge3.MaxValue = 100F;
             this.addGauge3.MinValue = 0F;
             this.addGauge3.Name = "addGauge3";
@@ -1045,7 +1015,7 @@ namespace LoggerMonitor
             this.addGauge2.CapText = "Add2";
             this.addGauge2.Center = new System.Drawing.Point(10, 75);
             this.addGauge2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.addGauge2.Location = new System.Drawing.Point(141, 525);
+            this.addGauge2.Location = new System.Drawing.Point(201, 520);
             this.addGauge2.MaxValue = 100F;
             this.addGauge2.MinValue = 0F;
             this.addGauge2.Name = "addGauge2";
@@ -1153,7 +1123,7 @@ namespace LoggerMonitor
             this.addGauge1.CapText = "Add1";
             this.addGauge1.Center = new System.Drawing.Point(85, 75);
             this.addGauge1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.addGauge1.Location = new System.Drawing.Point(18, 525);
+            this.addGauge1.Location = new System.Drawing.Point(78, 520);
             this.addGauge1.MaxValue = 100F;
             this.addGauge1.MinValue = 0F;
             this.addGauge1.Name = "addGauge1";
@@ -1261,7 +1231,7 @@ namespace LoggerMonitor
             this.analogGauge8.CapText = "Exh. Temp 8";
             this.analogGauge8.Center = new System.Drawing.Point(110, 110);
             this.analogGauge8.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.analogGauge8.Location = new System.Drawing.Point(780, 262);
+            this.analogGauge8.Location = new System.Drawing.Point(780, 252);
             this.analogGauge8.MaxValue = 1000F;
             this.analogGauge8.MinValue = 0F;
             this.analogGauge8.Name = "analogGauge8";
@@ -1369,7 +1339,7 @@ namespace LoggerMonitor
             this.analogGauge7.CapText = "Exh. Temp 7";
             this.analogGauge7.Center = new System.Drawing.Point(110, 110);
             this.analogGauge7.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.analogGauge7.Location = new System.Drawing.Point(680, 392);
+            this.analogGauge7.Location = new System.Drawing.Point(680, 382);
             this.analogGauge7.MaxValue = 1000F;
             this.analogGauge7.MinValue = 0F;
             this.analogGauge7.Name = "analogGauge7";
@@ -1477,7 +1447,7 @@ namespace LoggerMonitor
             this.analogGauge6.CapText = "Exh. Temp 6";
             this.analogGauge6.Center = new System.Drawing.Point(110, 110);
             this.analogGauge6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.analogGauge6.Location = new System.Drawing.Point(560, 262);
+            this.analogGauge6.Location = new System.Drawing.Point(560, 252);
             this.analogGauge6.MaxValue = 1000F;
             this.analogGauge6.MinValue = 0F;
             this.analogGauge6.Name = "analogGauge6";
@@ -1585,7 +1555,7 @@ namespace LoggerMonitor
             this.analogGauge5.CapText = "Exh. Temp 5";
             this.analogGauge5.Center = new System.Drawing.Point(110, 110);
             this.analogGauge5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.analogGauge5.Location = new System.Drawing.Point(460, 392);
+            this.analogGauge5.Location = new System.Drawing.Point(460, 382);
             this.analogGauge5.MaxValue = 1000F;
             this.analogGauge5.MinValue = 0F;
             this.analogGauge5.Name = "analogGauge5";
@@ -1693,7 +1663,7 @@ namespace LoggerMonitor
             this.analogGauge4.CapText = "Exh. Temp 4";
             this.analogGauge4.Center = new System.Drawing.Point(110, 110);
             this.analogGauge4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.analogGauge4.Location = new System.Drawing.Point(340, 262);
+            this.analogGauge4.Location = new System.Drawing.Point(340, 252);
             this.analogGauge4.MaxValue = 1000F;
             this.analogGauge4.MinValue = 0F;
             this.analogGauge4.Name = "analogGauge4";
@@ -1801,7 +1771,7 @@ namespace LoggerMonitor
             this.analogGauge3.CapText = "Exh. Temp 3";
             this.analogGauge3.Center = new System.Drawing.Point(110, 110);
             this.analogGauge3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.analogGauge3.Location = new System.Drawing.Point(240, 392);
+            this.analogGauge3.Location = new System.Drawing.Point(240, 382);
             this.analogGauge3.MaxValue = 1000F;
             this.analogGauge3.MinValue = 0F;
             this.analogGauge3.Name = "analogGauge3";
@@ -1909,7 +1879,7 @@ namespace LoggerMonitor
             this.analogGauge2.CapText = "Exh. Temp 2";
             this.analogGauge2.Center = new System.Drawing.Point(110, 110);
             this.analogGauge2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.analogGauge2.Location = new System.Drawing.Point(120, 262);
+            this.analogGauge2.Location = new System.Drawing.Point(120, 252);
             this.analogGauge2.MaxValue = 1000F;
             this.analogGauge2.MinValue = 0F;
             this.analogGauge2.Name = "analogGauge2";
@@ -2017,7 +1987,7 @@ namespace LoggerMonitor
             this.analogGauge1.CapText = "Exh. Temp 1";
             this.analogGauge1.Center = new System.Drawing.Point(110, 110);
             this.analogGauge1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.analogGauge1.Location = new System.Drawing.Point(20, 392);
+            this.analogGauge1.Location = new System.Drawing.Point(20, 382);
             this.analogGauge1.MaxValue = 1000F;
             this.analogGauge1.MinValue = 0F;
             this.analogGauge1.Name = "analogGauge1";
@@ -2528,12 +2498,53 @@ namespace LoggerMonitor
             this.rpmGauge1.Text = "aGauge1";
             this.rpmGauge1.Value = 0F;
             // 
+            // addGaugesUpDown
+            // 
+            this.addGaugesUpDown.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.addGaugesUpDown.Increment = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            this.addGaugesUpDown.Location = new System.Drawing.Point(20, 580);
+            this.addGaugesUpDown.Maximum = new decimal(new int[] {
+            25,
+            0,
+            0,
+            0});
+            this.addGaugesUpDown.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.addGaugesUpDown.Name = "addGaugesUpDown";
+            this.addGaugesUpDown.Size = new System.Drawing.Size(57, 29);
+            this.addGaugesUpDown.TabIndex = 58;
+            this.addGaugesUpDown.Value = new decimal(new int[] {
+            9,
+            0,
+            0,
+            0});
+            this.addGaugesUpDown.ValueChanged += new System.EventHandler(this.addGaugesUpDown_ValueChanged);
+            // 
+            // gaugesLabel
+            // 
+            this.gaugesLabel.AutoSize = true;
+            this.gaugesLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.gaugesLabel.Location = new System.Drawing.Point(7, 555);
+            this.gaugesLabel.Name = "gaugesLabel";
+            this.gaugesLabel.Size = new System.Drawing.Size(82, 20);
+            this.gaugesLabel.TabIndex = 59;
+            this.gaugesLabel.Text = "Gauges ...";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(1070, 703);
+            this.Controls.Add(this.gaugesLabel);
+            this.Controls.Add(this.addGaugesUpDown);
             this.Controls.Add(this.OnOffButton4);
             this.Controls.Add(this.OnOffButton3);
             this.Controls.Add(this.OnOffButton2);
@@ -2568,11 +2579,8 @@ namespace LoggerMonitor
             this.Controls.Add(this.analogGauge2);
             this.Controls.Add(this.analogGauge1);
             this.Controls.Add(this.Sensor_button);
-            this.Controls.Add(this.LogComp_button);
-            this.Controls.Add(this.ComPort_button);
             this.Controls.Add(this.Exit_button);
             this.Controls.Add(this.StopMonitor_button);
-            this.Controls.Add(this.StartMonitor_button);
             this.Controls.Add(this.rpmGauge4);
             this.Controls.Add(this.rpmGauge3);
             this.Controls.Add(this.rpmGauge2);
@@ -2584,6 +2592,7 @@ namespace LoggerMonitor
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.addGaugesUpDown)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -2597,11 +2606,8 @@ namespace LoggerMonitor
 		private AGauge rpmGauge3;
 		private AGauge rpmGauge4;
 		private System.IO.Ports.SerialPort serialPort1;
-		private System.Windows.Forms.Button StartMonitor_button;
 		private System.Windows.Forms.Button StopMonitor_button;
 		private System.Windows.Forms.Button Exit_button;
-		private System.Windows.Forms.Button ComPort_button;
-		private System.Windows.Forms.Button LogComp_button;
 		private System.Windows.Forms.Button Sensor_button;
 		private AGauge analogGauge1;
 		private AGauge analogGauge2;
@@ -2640,6 +2646,8 @@ namespace LoggerMonitor
         private System.Windows.Forms.Button OnOffButton2;
         private System.Windows.Forms.Button OnOffButton3;
         private System.Windows.Forms.Button OnOffButton4;
+        private System.Windows.Forms.NumericUpDown addGaugesUpDown;
+        private System.Windows.Forms.Label gaugesLabel;
     }
 }
 
