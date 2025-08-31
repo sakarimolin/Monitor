@@ -433,7 +433,7 @@ namespace LoggerMonitor
                 string analog;
                 string[] temp = new string[10];
 
-                for (int i = 0; i < (analog_sensor_count + temp_sensor_count); i++)
+                for (int i = 0; i < (/*analog_sensor_count*/ 8 + temp_sensor_count); i++)
                 {
                     next = br.BaseStream.Seek(start, SeekOrigin.Begin);
                     analog = "";
