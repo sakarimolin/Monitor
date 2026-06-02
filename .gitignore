@@ -6,6 +6,9 @@
 *.o
 *.obj
 
+/Installer/*.wixobj
+/Installer/*.wixpdb
+
 *.suo
 *.log
 
@@ -28,7 +31,8 @@
 bin/
 obj/
 packages/
+.vs/
 
+*.bak
 *.msi
-*.wixobj
-*.wixpdb
+
