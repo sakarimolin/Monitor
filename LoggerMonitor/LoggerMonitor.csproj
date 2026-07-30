@@ -150,6 +150,7 @@
       <DependentUpon>Form_1.cs</DependentUpon>
     </Compile>
     <Compile Include="loggerData.cs" />
+    <Compile Include="LoggerConnection.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="TextFile.cs" />
     <Compile Include="Form2.cs">

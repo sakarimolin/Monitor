@@ -8,7 +8,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Reflection;
-using System.Threading;
+//using System.Threading;
 using System.Windows.Forms;
 
 
@@ -26,6 +26,7 @@ namespace LoggerMonitor
         private string loggerName = "";
         private NetworkStream nwStream;
         private TcpClient client;
+        private LoggerConnection loggerConnection;
         private int readErrorCount = 0;
         private bool logging = false;
         private StreamWriter logFile;
@@ -42,7 +43,7 @@ namespace LoggerMonitor
         {
             InitializeComponent();
             var asmName = Assembly.GetExecutingAssembly().GetName();
-            this.Text = $"{asmName.Name}, Version {asmName.Version} Copyright  © S.Molin, 2025.";
+            this.Text = $"{asmName.Name}, Version {asmName.Version} Copyright  © S.Molin, 2026.";
 
             sets.Init();
             int port = sets.port;
@@ -140,40 +141,17 @@ namespace LoggerMonitor
 
         private bool ConnectToLogger(List<IPAddress> ipAddr, Int32 port)
         {
-            for (int attempt = 0; attempt < 2; attempt++)
+            LoggerConnection connection;
+            string errorMessage;
+            if (LoggerConnection.TryConnect(ipAddr, port, 2, 2000, out connection, out errorMessage))
             {
-                foreach (var ip in ipAddr)
-                {
-                    TcpClient candidate = new TcpClient(ip.AddressFamily);
-                    try
-                    {
-                        logTextBox.AppendText($" - Connecting to {loggerName} at {ip}. ");
-                        candidate.ReceiveTimeout = 1500;
-                        candidate.SendTimeout = 1500;
-                        IAsyncResult result = candidate.BeginConnect(ip, port, null, null);
-                        if (!result.AsyncWaitHandle.WaitOne(2000))
-                        {
-                            logTextBox.AppendText(" Connection timed out. ");
-                            continue;
-                        }
-
-                        candidate.EndConnect(result);
-                        client = candidate;
-                        return true;
-                    }
-                    catch (Exception ex)
-                    {
-                        logTextBox.AppendText(" Connection failed: " + ex.Message);
-                    }
-                    finally
-                    {
-                        if (!Object.ReferenceEquals(client, candidate))
-                            candidate.Close();
-                    }
-                }
-                if (attempt == 0)
-                    Thread.Sleep(250);
+                loggerConnection = connection;
+                client = connection.Client;
+                logTextBox.AppendText($" - Connected to {loggerName}. ");
+                return true;
             }
+
+            logTextBox.AppendText(" Connection failed: " + errorMessage);
             return false;
         }
 
@@ -215,7 +193,7 @@ namespace LoggerMonitor
                 Byte[] data = System.Text.Encoding.ASCII.GetBytes(message);
 
                 // Get a client stream for reading and writing.
-                nwStream = client.GetStream();
+                nwStream = loggerConnection.Stream;
                 nwStream.ReadTimeout = 3000;
                 nwStream.WriteTimeout = 2000;
                 lastLoggerDataUtc = DateTime.UtcNow;
@@ -346,7 +324,9 @@ namespace LoggerMonitor
 
             try
             {
-                if (nwStream != null)
+                if (loggerConnection != null)
+                    loggerConnection.Dispose();
+                else if (nwStream != null)
                     nwStream.Close();
             }
             catch (Exception)
@@ -355,6 +335,7 @@ namespace LoggerMonitor
             finally
             {
                 nwStream = null;
+                loggerConnection = null;
             }
 
             try
